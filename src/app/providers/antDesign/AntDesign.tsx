@@ -1,5 +1,6 @@
 import { App, ConfigProvider } from 'antd';
 import { type ReactNode } from 'react';
+import 'antd/dist/reset.css';
 
 interface AntDesignProps {
   children: ReactNode;
