@@ -2,11 +2,11 @@ import { App, ConfigProvider } from 'antd';
 import { type ReactNode } from 'react';
 import 'antd/dist/reset.css';
 
-interface AntDesignProps {
+interface AntProviderProps {
   children: ReactNode;
 }
 
-export const AntDesign = (props: AntDesignProps) => {
+export const AntProvider = (props: AntProviderProps) => {
   const { children } = props;
 
   return (

@@ -1,6 +1,10 @@
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
+import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '@/entities/user';
+import { ROUTE } from '@/shared/const/router.ts';
 
 const items: MenuProps['items'] = [
   {
@@ -16,6 +20,18 @@ const items: MenuProps['items'] = [
 ];
 
 export const MainNavigation = () => {
+  const { isAuth } = useAuth();
+  const location = useLocation();
+
+  const hasNavigation = useMemo(
+    () => isAuth && location.pathname !== ROUTE.LOGIN.path(),
+    [isAuth, location.pathname]
+  );
+
+  if (!hasNavigation) {
+    return <></>;
+  }
+
   return (
     <Menu
       mode='horizontal'
