@@ -1,5 +1,6 @@
 import { Layout } from 'antd';
 import React from 'react';
+import cls from './style.module.scss';
 
 const { Content } = Layout;
 
@@ -10,10 +11,8 @@ type MainLayoutProps = {
 
 export const MainLayout = ({ children, bottomNav }: MainLayoutProps) => {
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Content style={{ paddingBottom: bottomNav ? 56 : 0 }}>
-        {children}
-      </Content>
+    <Layout className={cls.mainLayout}>
+      <Content>{children}</Content>
       {bottomNav}
     </Layout>
   );

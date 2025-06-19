@@ -1,7 +1,6 @@
-import { Skeleton } from 'antd';
-import React, { lazy, type ReactNode, Suspense } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PrivateRoute } from './PrivateRoute.tsx';
+import React, { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { RouteWrapper } from './RouteWrapper.tsx';
 import { ROUTE } from '@/shared/const/router.ts';
 
 type RouteElement = {
@@ -28,40 +27,23 @@ const ROUTES: RouteElement[] = [
   }
 ];
 
-interface RouterProviderProps {
-  children: ReactNode;
-}
-
-export const RouterProvider = (props: RouterProviderProps) => {
-  const { children } = props;
-
+export const RouterProvider = () => {
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div style={{ padding: 16 }}>
-            <Skeleton active paragraph={{ rows: 4 }} />
-          </div>
-        }
-      >
-        <Routes>
-          {ROUTES.map(({ path, Component, isPrivate }) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                isPrivate ? (
-                  <PrivateRoute>{<Component />}</PrivateRoute>
-                ) : (
-                  <Component />
-                )
-              }
-            />
-          ))}
-        </Routes>
-
-        {children}
-      </Suspense>
-    </BrowserRouter>
+    // TODO: fallback loader
+    <Suspense fallback={<div>loading...</div>}>
+      <Routes>
+        {ROUTES.map(({ path, Component, isPrivate }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <RouteWrapper isPrivate={isPrivate}>
+                <Component />
+              </RouteWrapper>
+            }
+          />
+        ))}
+      </Routes>
+    </Suspense>
   );
 };

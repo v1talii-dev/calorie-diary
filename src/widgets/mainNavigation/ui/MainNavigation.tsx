@@ -1,8 +1,8 @@
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
+import { Menu, type MenuProps } from 'antd';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import cls from './style.module.scss';
 import { useAuth } from '@/entities/user';
 import { ROUTE } from '@/shared/const/router.ts';
 
@@ -33,17 +33,6 @@ export const MainNavigation = () => {
   }
 
   return (
-    <Menu
-      mode='horizontal'
-      items={items}
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        borderTop: '1px solid #eee',
-        zIndex: 1000
-      }}
-    />
+    <Menu className={cls.mainNavigation} mode='horizontal' items={items} />
   );
 };

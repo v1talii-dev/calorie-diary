@@ -1,0 +1,63 @@
+import { Button, Card, Form, Input } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import type { AppDispatch } from '@/app/providers/store';
+import { login } from '@/entities/user';
+import { ROUTE } from '@/shared/const/router.ts';
+
+interface LoginFormProps {
+  className?: string;
+}
+// TODO
+type LoginFormValues = {
+  username: string;
+  password: string;
+};
+
+export const LoginForm = (props: LoginFormProps) => {
+  const { className } = props;
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const onFinish = (values: LoginFormValues) => {
+    console.log('onFinish:', values);
+    dispatch(login());
+    navigate(location.state?.from?.pathname ?? ROUTE.HOME.path(), {
+      replace: true
+    });
+  };
+
+  return (
+    <Card title='Вход' className={className}>
+      <Form
+        name='login'
+        layout='vertical'
+        initialValues={{ username: '', password: '' }}
+        onFinish={onFinish}
+      >
+        <Form.Item
+          label='Имя пользователя'
+          name='username'
+          rules={[
+            { required: true, message: 'Пожалуйста, введите имя пользователя!' }
+          ]}
+        >
+          <Input placeholder='Введите имя пользователя' />
+        </Form.Item>
+
+        <Form.Item
+          label='Пароль'
+          name='password'
+          rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
+        >
+          <Input.Password placeholder='Введите пароль' />
+        </Form.Item>
+
+        <Button type='primary' htmlType='submit' block>
+          Войти
+        </Button>
+      </Form>
+    </Card>
+  );
+};
