@@ -16,6 +16,11 @@ const ROUTES: RouteElement[] = [
     Component: lazy(() => import('@/pages/home'))
   },
   {
+    path: ROUTE.PROFILE.path(),
+    isPrivate: ROUTE.PROFILE.isPrivate,
+    Component: lazy(() => import('@/pages/profile'))
+  },
+  {
     path: ROUTE.LOGIN.path(),
     isPrivate: ROUTE.LOGIN.isPrivate,
     Component: lazy(() => import('@/pages/login'))

@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { AppDispatch } from '@/app/providers/store';
+import { type AppDispatch } from '@/app';
 import { login } from '@/entities/user';
 import { ROUTE } from '@/shared/const/router.ts';
 

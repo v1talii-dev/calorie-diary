@@ -1,38 +1,47 @@
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu, type MenuProps } from 'antd';
-import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import cls from './style.module.scss';
-import { useAuth } from '@/entities/user';
-import { ROUTE } from '@/shared/const/router.ts';
+import { type Route, ROUTE } from '@/shared/const/router.ts';
+
+const ItemLabel = ({ item, icon }: { item: Route; icon: ReactNode }) => (
+  <Link to={item.path()} className={cls.menuLink}>
+    {icon}
+    <div className={cls.menuLinkText}>{item.name}</div>
+  </Link>
+);
 
 const items: MenuProps['items'] = [
   {
-    label: 'Журнал',
-    key: 'home',
-    icon: <HomeOutlined />
+    label: (
+      <ItemLabel
+        item={ROUTE.HOME}
+        icon={<HomeOutlined className={cls.menuLinkIcon} />}
+      />
+    ),
+    key: ROUTE.HOME.path()
   },
   {
-    label: 'Профиль',
-    key: 'profile',
-    icon: <UserOutlined />
+    label: (
+      <ItemLabel
+        item={ROUTE.PROFILE}
+        icon={<UserOutlined className={cls.menuLinkIcon} />}
+      />
+    ),
+    key: ROUTE.PROFILE.path()
   }
 ];
 
 export const MainNavigation = () => {
-  const { isAuth } = useAuth();
   const location = useLocation();
 
-  const hasNavigation = useMemo(
-    () => isAuth && location.pathname !== ROUTE.LOGIN.path(),
-    [isAuth, location.pathname]
-  );
-
-  if (!hasNavigation) {
-    return <></>;
-  }
-
   return (
-    <Menu className={cls.mainNavigation} mode='horizontal' items={items} />
+    <Menu
+      className={cls.mainNavigation}
+      selectedKeys={[location.pathname]}
+      mode='horizontal'
+      items={items}
+    />
   );
 };

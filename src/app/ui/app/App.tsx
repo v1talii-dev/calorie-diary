@@ -2,7 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AntProvider } from '../../providers/ant';
 import { RouterProvider } from '../../providers/router';
 import { StoreProvider } from '../../providers/store';
-import { MainLayout } from '@/shared/layouts/mainLayout';
+import { MainLayout } from '@/widgets/mainLayout';
 import { MainNavigation } from '@/widgets/mainNavigation';
 
 export const App = () => {
