@@ -1,11 +1,28 @@
-.mainLayout {
+.app {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.content {
-  padding: 16px;
-  overflow: auto;
+.top {
+  flex: 0;
+  border-bottom: solid 1px var(--adm-color-border);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  max-width: var(--app-main-width);
   width: 100%;
-  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bottom {
+  flex: 0;
+  border-top: solid 1px var(--adm-color-border);
+}
+.bottomContent {
+  max-width: var(--app-main-width);
+  width: 100%;
   margin: 0 auto;
 }

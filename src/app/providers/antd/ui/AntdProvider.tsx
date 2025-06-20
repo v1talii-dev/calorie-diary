@@ -1,5 +1,6 @@
 import { ConfigProvider } from 'antd-mobile';
 import { type ReactNode } from 'react';
+import './reset.scss';
 
 interface AntdProviderProps {
   children: ReactNode;
