@@ -1,47 +1,30 @@
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
-import { Menu, type MenuProps } from 'antd';
-import type { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import cls from './style.module.scss';
-import { type Route, ROUTE } from '@/shared/const/router.ts';
+import { TabBar } from 'antd-mobile';
+import { FileOutline, UserOutline } from 'antd-mobile-icons';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ROUTE } from '@/shared/const/router.ts';
 
-const ItemLabel = ({ item, icon }: { item: Route; icon: ReactNode }) => (
-  <Link to={item.path()} className={cls.menuLink}>
-    {icon}
-    <div className={cls.menuLinkText}>{item.name}</div>
-  </Link>
-);
-
-const items: MenuProps['items'] = [
+const items = [
   {
-    label: (
-      <ItemLabel
-        item={ROUTE.HOME}
-        icon={<HomeOutlined className={cls.menuLinkIcon} />}
-      />
-    ),
-    key: ROUTE.HOME.path()
+    key: ROUTE.HOME.path(),
+    title: ROUTE.HOME.name,
+    icon: <FileOutline />
   },
   {
-    label: (
-      <ItemLabel
-        item={ROUTE.PROFILE}
-        icon={<UserOutlined className={cls.menuLinkIcon} />}
-      />
-    ),
-    key: ROUTE.PROFILE.path()
+    key: ROUTE.PROFILE.path(),
+    title: ROUTE.PROFILE.name,
+    icon: <UserOutline />
   }
 ];
 
 export const MainNavigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
-    <Menu
-      className={cls.mainNavigation}
-      selectedKeys={[location.pathname]}
-      mode='horizontal'
-      items={items}
-    />
+    <TabBar activeKey={location.pathname} onChange={key => navigate(key)}>
+      {items.map(item => (
+        <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
+      ))}
+    </TabBar>
   );
 };

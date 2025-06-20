@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input } from 'antd';
+import { Button, Card, Form, Input } from 'antd-mobile';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type AppDispatch } from '@/app';
@@ -35,6 +35,11 @@ export const LoginForm = (props: LoginFormProps) => {
         layout='vertical'
         initialValues={{ username: '', password: '' }}
         onFinish={onFinish}
+        footer={
+          <Button block type='submit' color='primary' size='large'>
+            Вход
+          </Button>
+        }
       >
         <Form.Item
           label='Имя пользователя'
@@ -51,12 +56,8 @@ export const LoginForm = (props: LoginFormProps) => {
           name='password'
           rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
         >
-          <Input.Password placeholder='Введите пароль' />
+          <Input type='password' placeholder='Введите пароль' />
         </Form.Item>
-
-        <Button type='primary' htmlType='submit' block>
-          Войти
-        </Button>
       </Form>
     </Card>
   );

@@ -10,9 +10,9 @@
     "format": "npx prettier . --write"
   },
   "dependencies": {
-    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@reduxjs/toolkit": "^2.8.2",
-    "antd": "^5.26.1",
+    "antd-mobile": "https://pkg.pr.new/ant-design/ant-design-mobile/antd-mobile@6872",
+    "antd-mobile-icons": "^0.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",

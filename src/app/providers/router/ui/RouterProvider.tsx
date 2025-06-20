@@ -1,3 +1,4 @@
+import { DotLoading } from 'antd-mobile';
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { RouteWrapper } from './RouteWrapper.tsx';
@@ -34,8 +35,7 @@ const ROUTES: RouteElement[] = [
 
 export const RouterProvider = () => {
   return (
-    // TODO: fallback loader
-    <Suspense fallback={<div>loading...</div>}>
+    <Suspense fallback={<DotLoading color='primary' />}>
       <Routes>
         {ROUTES.map(({ path, Component, isPrivate }) => (
           <Route

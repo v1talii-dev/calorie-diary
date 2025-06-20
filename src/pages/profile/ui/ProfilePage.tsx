@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from 'antd-mobile';
 import { useDispatch } from 'react-redux';
 import { type AppDispatch } from '@/app';
 import { logout } from '@/entities/user';

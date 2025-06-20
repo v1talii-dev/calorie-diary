@@ -1,11 +1,9 @@
-import { Layout } from 'antd';
+import { Grid } from 'antd-mobile';
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import cls from './style.module.scss';
 import { useAuth } from '@/entities/user';
 import { ROUTE } from '@/shared/const/router.ts';
-
-const { Content } = Layout;
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -17,14 +15,14 @@ export const MainLayout = ({ children, bottomNav }: MainLayoutProps) => {
   const location = useLocation();
 
   const isVisibleBottomNav = useMemo(
-    () => isAuth && location.pathname !== ROUTE.LOGIN.path(),
-    [isAuth, location.pathname]
+    () => isAuth && location.pathname !== ROUTE.LOGIN.path() && bottomNav,
+    [bottomNav, isAuth, location.pathname]
   );
 
   return (
-    <Layout className={cls.mainLayout}>
-      <Content className={cls.content}>{children}</Content>
-      {isVisibleBottomNav && bottomNav}
-    </Layout>
+    <Grid columns={1} gap={8}>
+      <Grid.Item className={cls.content}>{children}</Grid.Item>
+      {isVisibleBottomNav && <Grid.Item>{bottomNav}</Grid.Item>}
+    </Grid>
   );
 };

@@ -1,13 +1,13 @@
-import { Col, Row } from 'antd';
+import { Grid } from 'antd-mobile';
 import cls from './style.module.scss';
 import { LoginForm } from '@/widgets/loginForm';
 
 export const LoginPage = () => {
   return (
-    <Row justify='center' align='middle' className={cls.loginPage}>
-      <Col>
+    <Grid columns={1} className={cls.loginPage}>
+      <Grid.Item>
         <LoginForm className={cls.loginForm} />
-      </Col>
-    </Row>
+      </Grid.Item>
+    </Grid>
   );
 };
