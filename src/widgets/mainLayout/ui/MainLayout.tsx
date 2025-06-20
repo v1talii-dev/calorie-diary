@@ -14,7 +14,7 @@ export const MainLayout = memo((props: MainLayoutProps) => {
   const { isAuth } = useAuth();
 
   return (
-    <AppFlex className={cls.app}>
+    <AppFlex className={cls.app} gap={null}>
       {isAuth && top && <div className={cls.top}>{top}</div>}
       <div className={cls.body}>{children}</div>
       {isAuth && bottom && (
