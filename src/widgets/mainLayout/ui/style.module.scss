@@ -11,10 +11,10 @@
 
 .body {
   flex: 1;
-  display: flex;
   max-width: var(--app-main-width);
   width: 100%;
-  margin: 0 auto;
+  padding: var(--app-main-padding);
+  align-self: center;
 }
 
 .bottom {

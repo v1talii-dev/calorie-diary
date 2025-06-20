@@ -11,9 +11,8 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div>
-      <div>profile</div>
-      <Button onClick={onLogout}>Выйти</Button>
-    </div>
+    <Button block type='submit' onClick={onLogout}>
+      Выйти
+    </Button>
   );
 };
