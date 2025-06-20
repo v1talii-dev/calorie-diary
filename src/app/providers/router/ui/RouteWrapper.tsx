@@ -22,7 +22,7 @@ export const RouteWrapper = (props: RouteWrapperProps) => {
   if (isAuth && location.pathname === ROUTE.LOGIN.path()) {
     return (
       <Navigate
-        to={location.state?.from ?? ROUTE.HOME.path()}
+        to={location.state?.from ?? ROUTE.DIARY.path()}
         replace
         state={{ from: location }}
       />

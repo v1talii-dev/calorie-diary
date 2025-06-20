@@ -23,7 +23,7 @@ export const LoginForm = (props: LoginFormProps) => {
   const onFinish = (values: LoginFormValues) => {
     console.log('onFinish:', values);
     dispatch(login());
-    navigate(location.state?.from?.pathname ?? ROUTE.HOME.path(), {
+    navigate(location.state?.from?.pathname ?? ROUTE.DIARY.path(), {
       replace: true
     });
   };

@@ -5,8 +5,8 @@ import { ROUTE } from '@/shared/const/router.ts';
 
 const items = [
   {
-    key: ROUTE.HOME.path(),
-    title: ROUTE.HOME.name,
+    key: ROUTE.DIARY.path(),
+    title: ROUTE.DIARY.name,
     icon: <FileOutline />
   },
   {

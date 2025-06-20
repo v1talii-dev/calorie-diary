@@ -12,9 +12,9 @@ type RouteElement = {
 
 const ROUTES: RouteElement[] = [
   {
-    path: ROUTE.HOME.path(),
-    isPrivate: ROUTE.HOME.isPrivate,
-    Component: lazy(() => import('@/pages/home'))
+    path: ROUTE.DIARY.path(),
+    isPrivate: ROUTE.DIARY.isPrivate,
+    Component: lazy(() => import('@/pages/diary'))
   },
   {
     path: ROUTE.PROFILE.path(),

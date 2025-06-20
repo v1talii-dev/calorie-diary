@@ -1,18 +1,9 @@
-import { Button } from 'antd-mobile';
-import { useDispatch } from 'react-redux';
-import { type AppDispatch } from '@/app';
-import { logout } from '@/entities/user';
+import { ProfileActions } from '@/features/profileActions';
 
 export const ProfilePage = () => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const onLogout = () => {
-    dispatch(logout());
-  };
-
   return (
-    <Button block type='submit' onClick={onLogout}>
-      Выйти
-    </Button>
+    <div>
+      <ProfileActions />
+    </div>
   );
 };

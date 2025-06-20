@@ -1,5 +1,5 @@
 import cls from './style.module.scss';
-import { LoginForm } from '@/widgets/loginForm';
+import { LoginForm } from '@/features/loginForm';
 
 export const LoginPage = () => {
   return (
