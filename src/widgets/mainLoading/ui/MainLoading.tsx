@@ -1,10 +1,11 @@
 import { DotLoading } from 'antd-mobile';
-import cls from './style.module.scss';
+import { memo } from 'react';
+import { AppFlex } from '@/shared/ui/appFlex';
 
-export const MainLoading = () => {
+export const MainLoading = memo(() => {
   return (
-    <div className={cls.mainLoading}>
-      <DotLoading color='primary' />
-    </div>
+    <AppFlex align='center' justify='center' full>
+      <DotLoading color='primary' style={{ fontSize: 24 }} />
+    </AppFlex>
   );
-};
+});

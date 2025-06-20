@@ -1,6 +1,7 @@
-import { type ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 import cls from './style.module.scss';
 import { useAuth } from '@/entities/user';
+import { AppFlex } from '@/shared/ui/appFlex';
 
 type MainLayoutProps = {
   top?: ReactNode;
@@ -8,12 +9,12 @@ type MainLayoutProps = {
   bottom?: ReactNode;
 };
 
-export const MainLayout = (props: MainLayoutProps) => {
+export const MainLayout = memo((props: MainLayoutProps) => {
   const { top, children, bottom } = props;
   const { isAuth } = useAuth();
 
   return (
-    <div className={cls.app}>
+    <AppFlex className={cls.app}>
       {isAuth && top && <div className={cls.top}>{top}</div>}
       <div className={cls.body}>{children}</div>
       {isAuth && bottom && (
@@ -21,6 +22,6 @@ export const MainLayout = (props: MainLayoutProps) => {
           <div className={cls.bottomContent}>{bottom}</div>
         </div>
       )}
-    </div>
+    </AppFlex>
   );
-};
+});

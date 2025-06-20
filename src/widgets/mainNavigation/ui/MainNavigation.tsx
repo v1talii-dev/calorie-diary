@@ -1,5 +1,6 @@
 import { TabBar } from 'antd-mobile';
 import { FileOutline, UserOutline } from 'antd-mobile-icons';
+import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/shared/const/router.ts';
 
@@ -16,7 +17,7 @@ const items = [
   }
 ];
 
-export const MainNavigation = () => {
+export const MainNavigation = memo(() => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,4 +28,4 @@ export const MainNavigation = () => {
       ))}
     </TabBar>
   );
-};
+});

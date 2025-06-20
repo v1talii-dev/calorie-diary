@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, memo, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { RouteWrapper } from './RouteWrapper.tsx';
 import { ROUTE } from '@/shared/const/router.ts';
@@ -33,7 +33,7 @@ const ROUTES: RouteElement[] = [
   }
 ];
 
-export const RouterProvider = () => {
+export const RouterProvider = memo(() => {
   return (
     <Suspense fallback={<MainLoading />}>
       <Routes>
@@ -51,4 +51,4 @@ export const RouterProvider = () => {
       </Routes>
     </Suspense>
   );
-};
+});

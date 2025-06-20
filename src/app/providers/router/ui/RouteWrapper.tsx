@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/entities/user';
 import { ROUTE } from '@/shared/const/router.ts';
@@ -8,7 +8,7 @@ interface RouteWrapperProps {
   isPrivate: boolean;
 }
 
-export const RouteWrapper = (props: RouteWrapperProps) => {
+export const RouteWrapper = memo((props: RouteWrapperProps) => {
   const { children, isPrivate } = props;
   const { isAuth } = useAuth();
   const location = useLocation();
@@ -30,4 +30,4 @@ export const RouteWrapper = (props: RouteWrapperProps) => {
   }
 
   return children;
-};
+});

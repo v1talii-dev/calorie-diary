@@ -1,9 +1,9 @@
 import { NavBar } from 'antd-mobile';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ROUTE } from '@/shared/const/router.ts';
 
-export const MainHeader = () => {
+export const MainHeader = memo(() => {
   const location = useLocation();
 
   const routeMetadata = useMemo(() => {
@@ -12,4 +12,4 @@ export const MainHeader = () => {
   }, [location]);
 
   return <NavBar back={null}>{routeMetadata?.name}</NavBar>;
-};
+});
