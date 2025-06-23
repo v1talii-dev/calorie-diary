@@ -1,6 +1,7 @@
 import { Button } from 'antd-mobile';
 import { AddSquareOutline } from 'antd-mobile-icons';
 import { useCallback, useState } from 'react';
+import { DiaryList } from '@/features/diaryList';
 import { DiaryPopup } from '@/features/diaryPopup';
 import { AppFlex } from '@/shared/ui/appFlex';
 
@@ -16,7 +17,7 @@ export const DiaryContent = () => {
   }, []);
 
   return (
-    <AppFlex gap={16} fullWidth={true}>
+    <AppFlex gap={8} fullWidth={true}>
       <AppFlex direction='row' align='center' justify='space-between'>
         <div>Употреблено</div>
         <Button
@@ -28,6 +29,8 @@ export const DiaryContent = () => {
           <AddSquareOutline fontSize={32} />
         </Button>
       </AppFlex>
+
+      <DiaryList />
 
       <DiaryPopup isOpen={isOpenDiaryPopup} onClose={onCloseDiaryPopup} />
     </AppFlex>

@@ -1,6 +1,8 @@
 import { ConfigProvider } from 'antd-mobile';
+import ruRU from 'antd-mobile/es/locales/ru-RU';
 import { memo, type ReactNode } from 'react';
 import './reset.scss';
+import './variables.scss';
 
 interface AntdProviderProps {
   children: ReactNode;
@@ -11,5 +13,5 @@ interface AntdProviderProps {
 export const AntdProvider = memo((props: AntdProviderProps) => {
   const { children } = props;
 
-  return <ConfigProvider>{children}</ConfigProvider>;
+  return <ConfigProvider locale={ruRU}>{children}</ConfigProvider>;
 });
