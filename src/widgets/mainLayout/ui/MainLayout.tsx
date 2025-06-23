@@ -15,11 +15,19 @@ export const MainLayout = memo((props: MainLayoutProps) => {
 
   return (
     <AppFlex className={cls.app} gap={null}>
-      {isAuth && top && <div className={cls.top}>{top}</div>}
-      <div className={cls.body}>{children}</div>
+      {isAuth && top && (
+        <div className={cls.top}>
+          <div className={cls.section}>{top}</div>
+        </div>
+      )}
+
+      <div className={cls.body}>
+        <div className={cls.section}>{children}</div>
+      </div>
+
       {isAuth && bottom && (
         <div className={cls.bottom}>
-          <div className={cls.bottomContent}>{bottom}</div>
+          <div className={cls.section}>{bottom}</div>
         </div>
       )}
     </AppFlex>

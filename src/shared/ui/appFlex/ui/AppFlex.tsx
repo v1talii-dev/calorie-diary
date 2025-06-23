@@ -11,7 +11,8 @@ interface AppFlexProps extends HTMLAttributes<HTMLDivElement> {
   align?: 'flex-start' | 'center' | 'flex-end';
   justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between';
   wrap?: 'nowrap' | 'wrap';
-  full?: boolean;
+  fullHeight?: boolean;
+  fullWidth?: boolean;
 }
 
 export const AppFlex = memo((props: AppFlexProps) => {
@@ -23,7 +24,8 @@ export const AppFlex = memo((props: AppFlexProps) => {
     align,
     justify,
     wrap,
-    full,
+    fullHeight,
+    fullWidth,
     ...otherProps
   } = props;
 
@@ -35,8 +37,8 @@ export const AppFlex = memo((props: AppFlexProps) => {
         [cls[`app-flex--align-${align}`]]: !!align,
         [cls[`app-flex--justify-${justify}`]]: !!justify,
         [cls[`app-flex--wrap-${wrap}`]]: !!wrap,
-        [cls[`app-flex--full-height`]]: direction === 'column' && full,
-        [cls[`app-flex--full-width`]]: direction === 'row' && full
+        [cls[`app-flex--full-height`]]: fullHeight,
+        [cls[`app-flex--full-width`]]: fullWidth
       })}
       {...otherProps}
     >

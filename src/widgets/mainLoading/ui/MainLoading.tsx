@@ -4,7 +4,7 @@ import { AppFlex } from '@/shared/ui/appFlex';
 
 export const MainLoading = memo(() => {
   return (
-    <AppFlex align='center' justify='center' full>
+    <AppFlex align='center' justify='center' fullHeight={true}>
       <DotLoading color='primary' style={{ fontSize: 24 }} />
     </AppFlex>
   );
