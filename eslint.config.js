@@ -34,7 +34,8 @@ export default tseslint.config(
         {
           alphabetize: { order: 'asc' }
         }
-      ]
+      ],
+      '@typescript-eslint/ban-ts-comment': 'off'
     }
   }
 );

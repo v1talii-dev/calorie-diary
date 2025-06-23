@@ -1,1 +1,1 @@
-export { DiaryPopup } from './ui/DiaryPopup.tsx';
+export { DiaryPopup } from './ui/diaryPopup/DiaryPopup.tsx';

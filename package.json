@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
-    "antd-mobile": "https://pkg.pr.new/ant-design/ant-design-mobile/antd-mobile@6872",
+    "antd-mobile": "^5.40.0",
     "antd-mobile-icons": "^0.3.0",
+    "dayjs": "^1.11.13",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
