@@ -3,27 +3,20 @@ import { memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type AppDispatch } from '@/app';
-import { login } from '@/entities/user';
+import { type AuthProps, login } from '@/entities/user';
 import { ROUTE } from '@/shared/const/router.ts';
 
 interface LoginFormProps {
   className?: string;
 }
-// TODO
-type LoginFormValues = {
-  username: string;
-  password: string;
-};
-
 export const LoginForm = memo((props: LoginFormProps) => {
   const { className } = props;
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onFinish = (values: LoginFormValues) => {
-    console.log('onFinish:', values);
-    dispatch(login());
+  const onFinish = (payload: AuthProps) => {
+    dispatch(login(payload));
     navigate(location.state?.from?.pathname ?? ROUTE.DIARY.path(), {
       replace: true
     });

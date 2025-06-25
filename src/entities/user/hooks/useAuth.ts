@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { selectIsAuth } from '../model/selectors/auth.ts';
+import { authToken } from '../model/selectors/auth.ts';
 
 export const useAuth = () => {
-  const isAuth = useSelector(selectIsAuth);
+  const token = useSelector(authToken);
 
-  return { isAuth };
+  return { isAuth: Boolean(token) };
 };

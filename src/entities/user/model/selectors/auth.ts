@@ -1,3 +1,3 @@
 import { type RootState } from '@/app';
 
-export const selectIsAuth = (state: RootState) => state.auth.isAuth;
+export const authToken = (state: RootState) => state.auth.token;

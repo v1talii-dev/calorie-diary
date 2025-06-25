@@ -1,1 +1,1 @@
-export { useGetFoodsQuery } from './model/service/fatsercetService.ts';
+export { useGetFoodsQuery } from './model/service/openFoodFactsService.ts';

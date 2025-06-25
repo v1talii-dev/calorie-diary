@@ -1,25 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { USER_AUTH } from '@/shared/const/localstorage';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { AuthProps } from '../../types';
+import { AUTH_TOKEN } from '@/shared/const/localstorage';
 
 type AuthState = {
-  isAuth: boolean;
+  token?: string;
 };
 
 const initialState: AuthState = {
-  isAuth: !!localStorage.getItem(USER_AUTH)
+  token: localStorage.getItem(AUTH_TOKEN) || undefined
 };
 
 const auth = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state) {
-      localStorage.setItem(USER_AUTH, 'demo_token');
-      state.isAuth = true;
+    login(state, action: PayloadAction<AuthProps>) {
+      const token = btoa(
+        `${action.payload.username}:${action.payload.password}`
+      );
+      state.token = token;
+      localStorage.setItem(AUTH_TOKEN, token);
     },
     logout(state) {
-      localStorage.removeItem(USER_AUTH);
-      state.isAuth = false;
+      state.token = undefined;
+      localStorage.removeItem(AUTH_TOKEN);
     }
   }
 });

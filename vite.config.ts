@@ -16,11 +16,11 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        '^/api/fatsecret': {
-          target: env.VITE_API_FATSECRET,
+        '^/api/openfoodfacts': {
+          target: env.VITE_API_OPENFOODFACTS,
           changeOrigin: true,
           secure: false,
-          rewrite: path => path.replace(/^\/api\/fatsecret/, '')
+          rewrite: path => path.replace(/^\/api\/openfoodfacts/, '')
         }
       }
     }
