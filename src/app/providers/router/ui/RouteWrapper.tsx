@@ -1,6 +1,6 @@
 import { memo, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/entities/user';
+import { useFirebaseAuth } from '@/app/providers/firebase';
 import { ROUTE } from '@/shared/const/router.ts';
 
 interface RouteWrapperProps {
@@ -10,16 +10,16 @@ interface RouteWrapperProps {
 
 export const RouteWrapper = memo((props: RouteWrapperProps) => {
   const { children, isPrivate } = props;
-  const { isAuth } = useAuth();
+  const { user } = useFirebaseAuth();
   const location = useLocation();
 
-  if (!isAuth && isPrivate) {
+  if (!user && isPrivate) {
     return (
       <Navigate to={ROUTE.LOGIN.path()} replace state={{ from: location }} />
     );
   }
 
-  if (isAuth && location.pathname === ROUTE.LOGIN.path()) {
+  if (user && location.pathname === ROUTE.LOGIN.path()) {
     return (
       <Navigate
         to={location.state?.from ?? ROUTE.DIARY.path()}

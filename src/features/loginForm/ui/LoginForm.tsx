@@ -2,10 +2,8 @@ import { Button, Form, Input, Toast } from 'antd-mobile';
 import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { type AppDispatch } from '@/app';
-import { type AuthProps, login } from '@/entities/user';
+import { type AuthProps } from '@/entities/user';
 import { auth } from '@/shared/api/firebase.ts';
 import { ROUTE } from '@/shared/const/router.ts';
 
@@ -16,7 +14,6 @@ export const LoginForm = memo((props: LoginFormProps) => {
   const { className } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,9 +26,6 @@ export const LoginForm = memo((props: LoginFormProps) => {
       setIsLoading(true);
 
       await signInWithEmailAndPassword(auth, payload.email, payload.password);
-
-      // TODO: перевести источник истины авторизации на firebase
-      dispatch(login(payload));
       navigate(location.state?.from?.pathname ?? ROUTE.DIARY.path(), {
         replace: true
       });

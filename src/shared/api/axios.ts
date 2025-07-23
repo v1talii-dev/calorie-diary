@@ -1,16 +1,10 @@
 import { Toast } from 'antd-mobile';
 import axios, { type AxiosError } from 'axios';
-import { store } from '@/app';
 
 const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(
   config => {
-    const state = store.getState();
-    if (state.auth?.token) {
-      // TODO
-      // config.headers.Authorization = `Bearer ${state.auth.token}`;
-    }
     return config;
   },
   error => {

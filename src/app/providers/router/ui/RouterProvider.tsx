@@ -2,7 +2,6 @@ import React, { lazy, memo, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { RouteWrapper } from './RouteWrapper.tsx';
 import { ROUTE } from '@/shared/const/router.ts';
-import { MainLoading } from '@/widgets/mainLoading';
 
 type RouteElement = {
   path: string;
@@ -35,7 +34,7 @@ const ROUTES: RouteElement[] = [
 
 export const RouterProvider = memo(() => {
   return (
-    <Suspense fallback={<MainLoading />}>
+    <Suspense fallback={<></>}>
       <Routes>
         {ROUTES.map(({ path, Component, isPrivate }) => (
           <Route

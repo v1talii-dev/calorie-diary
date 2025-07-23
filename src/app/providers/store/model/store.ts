@@ -1,11 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { authReducer } from '@/entities/user';
 import { rtkQueryApi } from '@/shared/api/rtkQuery.ts';
 
 export const store = configureStore({
   reducer: combineReducers({
-    [rtkQueryApi.reducerPath]: rtkQueryApi.reducer,
-    auth: authReducer
+    [rtkQueryApi.reducerPath]: rtkQueryApi.reducer
   }),
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat([rtkQueryApi.middleware])
