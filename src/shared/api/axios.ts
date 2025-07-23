@@ -27,8 +27,10 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     Toast.show({
       // TODO
-      // @ts-ignore
-      content: error.response?.data?.message
+      content:
+        // @ts-ignore
+        error.response?.data?.message ?? JSON.stringify(error.response?.data),
+      position: 'bottom'
     });
     return Promise.reject(error);
   }

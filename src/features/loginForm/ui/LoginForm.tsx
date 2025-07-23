@@ -1,9 +1,12 @@
-import { Button, Form, Input } from 'antd-mobile';
-import { memo } from 'react';
+import { Button, Form, Input, Toast } from 'antd-mobile';
+import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { type AppDispatch } from '@/app';
 import { type AuthProps, login } from '@/entities/user';
+import { auth } from '@/shared/api/firebase.ts';
 import { ROUTE } from '@/shared/const/router.ts';
 
 interface LoginFormProps {
@@ -11,15 +14,36 @@ interface LoginFormProps {
 }
 export const LoginForm = memo((props: LoginFormProps) => {
   const { className } = props;
+  const [isLoading, setIsLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onFinish = (payload: AuthProps) => {
-    dispatch(login(payload));
-    navigate(location.state?.from?.pathname ?? ROUTE.DIARY.path(), {
-      replace: true
-    });
+  const toggleVisibility = () => {
+    setVisible(v => !v);
+  };
+
+  const onFinish = async (payload: AuthProps) => {
+    try {
+      setIsLoading(true);
+
+      await signInWithEmailAndPassword(auth, payload.email, payload.password);
+
+      // TODO: перевести источник истины авторизации на firebase
+      dispatch(login(payload));
+      navigate(location.state?.from?.pathname ?? ROUTE.DIARY.path(), {
+        replace: true
+      });
+    } catch (error) {
+      Toast.show({
+        //@ts-ignore
+        content: error.message,
+        position: 'bottom'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -27,10 +51,17 @@ export const LoginForm = memo((props: LoginFormProps) => {
       className={className}
       name='login'
       layout='vertical'
-      initialValues={{ username: '', password: '' }}
+      initialValues={{ email: '', password: '' }}
       onFinish={onFinish}
       footer={
-        <Button block type='submit' color='primary' size='large'>
+        <Button
+          block
+          type='submit'
+          color='primary'
+          size='large'
+          disabled={isLoading}
+          loading={isLoading}
+        >
           Вход
         </Button>
       }
@@ -38,21 +69,30 @@ export const LoginForm = memo((props: LoginFormProps) => {
       <Form.Header>Вход</Form.Header>
 
       <Form.Item
-        label='Имя пользователя'
-        name='username'
+        label='Email'
+        name='email'
         rules={[
-          { required: true, message: 'Пожалуйста, введите имя пользователя!' }
+          { required: true, message: 'Пожалуйста, введите email' },
+          { type: 'email', message: 'Неверный формат email' }
         ]}
       >
-        <Input placeholder='Введите имя пользователя' />
+        <Input placeholder='Введите email' />
       </Form.Item>
 
       <Form.Item
         label='Пароль'
         name='password'
-        rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
+        extra={
+          <Button type='button' fill='none' onClick={toggleVisibility}>
+            {visible ? <EyeOutline /> : <EyeInvisibleOutline />}
+          </Button>
+        }
+        rules={[{ required: true, message: 'Пожалуйста, введите пароль' }]}
       >
-        <Input type='password' placeholder='Введите пароль' />
+        <Input
+          type={visible ? 'text' : 'password'}
+          placeholder='Введите пароль'
+        />
       </Form.Item>
     </Form>
   );

@@ -15,9 +15,7 @@ const auth = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<AuthProps>) {
-      const token = btoa(
-        `${action.payload.username}:${action.payload.password}`
-      );
+      const token = btoa(`${action.payload.email}:${action.payload.password}`);
       state.token = token;
       localStorage.setItem(AUTH_TOKEN, token);
     },
