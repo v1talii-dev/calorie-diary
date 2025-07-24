@@ -1,32 +1,24 @@
 import { List } from 'antd-mobile';
-import { useCallback } from 'react';
 import cls from './style.module.scss';
-import { getCaloriesValue, getWeightValue } from '@/shared/lib/catalog.ts';
-
-// TODO: удалить моки
-const items: { id: number; name: string; weight: number; calories: number }[] =
-  [
-    {
-      id: 1,
-      name: 'Bombbar pro complex whey Vanilla Ice Cream',
-      weight: 30,
-      calories: 400
-    }
-  ];
+import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { getWeightValue } from '@/shared/lib/catalog.ts';
 
 export const DiaryList = () => {
-  const onClickItem = useCallback(() => {}, []);
+  const { data: entries, error, isLoading } = useGetDiaryEntriesQuery();
+
+  if (isLoading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка загрузки данных</div>;
+  if (!entries || entries.length === 0) return <div>Нет записей</div>;
 
   return (
     <List className={cls.diaryList}>
-      {items.map(item => (
+      {entries.map(item => (
         <List.Item
           key={item.id}
           description={getWeightValue(item.weight)}
-          extra={getCaloriesValue(item.calories)}
-          onClick={onClickItem}
+          // extra={getCaloriesValue()}
         >
-          {item.name}
+          TODO: product name...
         </List.Item>
       ))}
     </List>

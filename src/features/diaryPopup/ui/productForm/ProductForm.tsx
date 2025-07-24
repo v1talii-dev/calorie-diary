@@ -6,10 +6,9 @@ import {
   Input
 } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { addDoc, collection, Timestamp } from 'firebase/firestore';
-import { type RefObject, useCallback, useEffect, useState } from 'react';
+import { type RefObject, useCallback, useEffect } from 'react';
 import type { ProductValues } from '../../model/types';
-import { auth, db } from '@/shared/api/firebase.ts';
+import { useAddDiaryEntryMutation } from '@/entities/diary';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
 
 interface ProductFormProps {
@@ -19,7 +18,7 @@ interface ProductFormProps {
 export const ProductForm = (props: ProductFormProps) => {
   const { onSave } = props;
   const [form] = Form.useForm();
-  const [isLoading, setIsLoading] = useState(false);
+  const [addDiaryEntry, { isLoading }] = useAddDiaryEntryMutation();
 
   const setFormDefaultValues = useCallback(() => {
     form.setFieldsValue({
@@ -30,19 +29,16 @@ export const ProductForm = (props: ProductFormProps) => {
 
   const onFinish = async (values: ProductValues) => {
     try {
-      setIsLoading(true);
-      await addDoc(collection(db, 'diary'), {
-        uid: auth.currentUser?.uid,
+      await addDiaryEntry({
         weight: Number(values.weight),
-        date: Timestamp.fromDate(values.date)
-      });
+        date: values.date
+      }).unwrap();
+
       setFormDefaultValues();
       // TODO
       onSave(values);
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsLoading(false);
     }
   };
 
