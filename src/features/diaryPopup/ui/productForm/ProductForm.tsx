@@ -6,8 +6,10 @@ import {
   Input
 } from 'antd-mobile';
 import dayjs from 'dayjs';
-import type { RefObject } from 'react';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import { type RefObject, useCallback, useEffect, useState } from 'react';
 import type { ProductValues } from '../../model/types';
+import { auth, db } from '@/shared/api/firebase.ts';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
 
 interface ProductFormProps {
@@ -16,24 +18,58 @@ interface ProductFormProps {
 
 export const ProductForm = (props: ProductFormProps) => {
   const { onSave } = props;
+  const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onFinish = (values: ProductValues) => {
-    onSave(values);
+  const setFormDefaultValues = useCallback(() => {
+    form.setFieldsValue({
+      weight: '',
+      date: dayjs().startOf('day').toDate()
+    });
+  }, [form]);
+
+  const onFinish = async (values: ProductValues) => {
+    try {
+      setIsLoading(true);
+      await addDoc(collection(db, 'diary'), {
+        uid: auth.currentUser?.uid,
+        weight: Number(values.weight),
+        date: Timestamp.fromDate(values.date)
+      });
+      setFormDefaultValues();
+      // TODO
+      onSave(values);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    setFormDefaultValues();
+  }, [setFormDefaultValues]);
 
   return (
     <Form
-      name='form'
-      onFinish={onFinish}
+      form={form}
       footer={
-        <Button block type='submit' color='primary' size='large'>
+        <Button
+          block
+          type='submit'
+          color='primary'
+          size='large'
+          disabled={isLoading}
+          loading={isLoading}
+        >
           Сохранить
         </Button>
       }
+      onFinish={onFinish}
     >
       <Form.Header>Добавить в дневник</Form.Header>
 
-      <Form.Item name='weigth' label='Количество' rules={[{ required: true }]}>
+      <Form.Item name='weight' label='Вес' rules={[{ required: true }]}>
         <Input placeholder='В граммах' type='number' autoFocus={true} />
       </Form.Item>
 

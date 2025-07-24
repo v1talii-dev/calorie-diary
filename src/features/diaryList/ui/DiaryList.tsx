@@ -15,9 +15,7 @@ const items: { id: number; name: string; weight: number; calories: number }[] =
   ];
 
 export const DiaryList = () => {
-  const onClickItem = useCallback(() => {
-    console.log('onClickItem');
-  }, []);
+  const onClickItem = useCallback(() => {}, []);
 
   return (
     <List className={cls.diaryList}>

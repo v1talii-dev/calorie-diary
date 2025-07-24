@@ -1,6 +1,6 @@
 import { Popup } from 'antd-mobile';
 import type { ProductValues } from '../../model/types';
-import { FoodList } from '../foodList/FoodList.tsx';
+// import { FoodList } from '../foodList/FoodList.tsx';
 import { ProductForm } from '../productForm/ProductForm.tsx';
 
 interface DiaryPopupProps {
@@ -19,7 +19,7 @@ export const DiaryPopup = (props: DiaryPopupProps) => {
   return (
     <Popup visible={isOpen} onMaskClick={onClose}>
       <ProductForm onSave={onSaveProductForm} />
-      <FoodList />
+      {/*<FoodList />*/}
     </Popup>
   );
 };
