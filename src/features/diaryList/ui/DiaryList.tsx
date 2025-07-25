@@ -20,7 +20,7 @@ export const DiaryList = (props: DiaryListProps) => {
   }
 
   if (!entries?.length) {
-    return <ErrorBlock status='empty' />;
+    return <ErrorBlock status='empty' title='Дневник пуст' description='' />;
   }
 
   return (

@@ -8,7 +8,7 @@ import {
   Space
 } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { type RefObject, useCallback, useEffect, useMemo } from 'react';
+import { type RefObject, useCallback, useEffect } from 'react';
 import {
   type DiaryRecord,
   useAddDiaryEntryMutation,
@@ -21,7 +21,9 @@ interface ProductFormProps {
   value?: DiaryRecord;
   onChange: () => void;
 }
-type FormProps = Partial<{ date?: Date } & Omit<DiaryRecord, 'date'>>;
+type FormProps = Partial<
+  { weight?: string; date?: Date } & Omit<DiaryRecord, 'weight' | 'date'>
+>;
 
 export const ProductForm = (props: ProductFormProps) => {
   const { value, onChange } = props;
@@ -33,18 +35,15 @@ export const ProductForm = (props: ProductFormProps) => {
   const [deleteDiaryEntry, { isLoading: isLoadingDelete }] =
     useDeleteDiaryEntryMutation();
 
-  const isLoading = useMemo(
-    () => isLoadingAdd || isLoadingEdit || isLoadingDelete,
-    [isLoadingAdd, isLoadingEdit, isLoadingDelete]
-  );
-
   const setFormDefaultValues = useCallback(() => {
     const result = value
       ? {
           ...value,
+          weight: String(value.weight),
           date: value.date ? new Date(value.date) : undefined
         }
       : {
+          weight: '',
           date: dayjs().startOf('day').toDate()
         };
     form.setFieldsValue(result);
@@ -54,7 +53,7 @@ export const ProductForm = (props: ProductFormProps) => {
     try {
       const payload = {
         id: value?.id,
-        weight: form.weight,
+        weight: Number(form.weight),
         date: form.date?.toISOString()
       };
       const apiMethod = payload.id ? editDiaryEntry : addDiaryEntry;
@@ -72,6 +71,7 @@ export const ProductForm = (props: ProductFormProps) => {
         return;
       }
       await deleteDiaryEntry(value.id).unwrap();
+      setFormDefaultValues();
       onChange();
     } catch (e) {
       console.error(e);
@@ -92,8 +92,8 @@ export const ProductForm = (props: ProductFormProps) => {
             type='submit'
             color='primary'
             size='large'
-            disabled={isLoading}
-            loading={isLoading}
+            disabled={isLoadingAdd || isLoadingEdit}
+            loading={isLoadingAdd || isLoadingEdit}
           >
             Сохранить
           </Button>
@@ -102,8 +102,8 @@ export const ProductForm = (props: ProductFormProps) => {
               block
               color='danger'
               size='large'
-              disabled={isLoading}
-              loading={isLoading}
+              disabled={isLoadingDelete}
+              loading={isLoadingDelete}
               onClick={() => {
                 Dialog.show({
                   content: 'Вы действительно хотите удалить запись в дневнике?',
@@ -133,10 +133,17 @@ export const ProductForm = (props: ProductFormProps) => {
       }
       onFinish={onSaveForm}
     >
-      <Form.Header>Добавить в дневник</Form.Header>
+      <Form.Header>
+        {value?.id ? 'Обновить запись в дневнике' : 'Добавить в дневник'}
+      </Form.Header>
 
       <Form.Item name='weight' label='Вес' rules={[{ required: true }]}>
-        <Input placeholder='В граммах' type='number' autoFocus={true} />
+        <Input
+          placeholder='В граммах'
+          type='number'
+          autoFocus={true}
+          clearable
+        />
       </Form.Item>
 
       <Form.Item
