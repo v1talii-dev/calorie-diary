@@ -1,14 +1,27 @@
-import { List } from 'antd-mobile';
+import { ErrorBlock, List, Skeleton } from 'antd-mobile';
 import cls from './style.module.scss';
-import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { getWeightValue } from '@/shared/lib/catalog.ts';
 
-export const DiaryList = () => {
+interface DiaryListProps {
+  onClickItem: (item: DiaryRecord) => void;
+}
+
+export const DiaryList = (props: DiaryListProps) => {
+  const { onClickItem } = props;
   const { data: entries, error, isLoading } = useGetDiaryEntriesQuery();
 
-  if (isLoading) return <div>Загрузка...</div>;
-  if (error) return <div>Ошибка загрузки данных</div>;
-  if (!entries || entries.length === 0) return <div>Нет записей</div>;
+  if (isLoading) {
+    return <Skeleton.Paragraph lineCount={5} animated />;
+  }
+
+  if (error) {
+    return <ErrorBlock status='default' />;
+  }
+
+  if (!entries?.length) {
+    return <ErrorBlock status='empty' />;
+  }
 
   return (
     <List className={cls.diaryList}>
@@ -17,6 +30,7 @@ export const DiaryList = () => {
           key={item.id}
           description={getWeightValue(item.weight)}
           // extra={getCaloriesValue()}
+          onClick={() => onClickItem(item)}
         >
           TODO: product name...
         </List.Item>

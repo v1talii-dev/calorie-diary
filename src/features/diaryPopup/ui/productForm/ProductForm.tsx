@@ -2,41 +2,77 @@ import {
   Button,
   DatePicker,
   type DatePickerRef,
+  Dialog,
   Form,
-  Input
+  Input,
+  Space
 } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { type RefObject, useCallback, useEffect } from 'react';
-import type { ProductValues } from '../../model/types';
-import { useAddDiaryEntryMutation } from '@/entities/diary';
+import { type RefObject, useCallback, useEffect, useMemo } from 'react';
+import {
+  type DiaryRecord,
+  useAddDiaryEntryMutation,
+  useDeleteDiaryEntryMutation,
+  useEditDiaryEntryMutation
+} from '@/entities/diary';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
 
 interface ProductFormProps {
-  onSave: (payload: ProductValues) => void;
+  value?: DiaryRecord;
+  onChange: () => void;
 }
+type FormProps = Partial<{ date?: Date } & Omit<DiaryRecord, 'date'>>;
 
 export const ProductForm = (props: ProductFormProps) => {
-  const { onSave } = props;
-  const [form] = Form.useForm();
-  const [addDiaryEntry, { isLoading }] = useAddDiaryEntryMutation();
+  const { value, onChange } = props;
+  const [form] = Form.useForm<FormProps>();
+  const [addDiaryEntry, { isLoading: isLoadingAdd }] =
+    useAddDiaryEntryMutation();
+  const [editDiaryEntry, { isLoading: isLoadingEdit }] =
+    useEditDiaryEntryMutation();
+  const [deleteDiaryEntry, { isLoading: isLoadingDelete }] =
+    useDeleteDiaryEntryMutation();
+
+  const isLoading = useMemo(
+    () => isLoadingAdd || isLoadingEdit || isLoadingDelete,
+    [isLoadingAdd, isLoadingEdit, isLoadingDelete]
+  );
 
   const setFormDefaultValues = useCallback(() => {
-    form.setFieldsValue({
-      weight: '',
-      date: dayjs().startOf('day').toDate()
-    });
-  }, [form]);
+    const result = value
+      ? {
+          ...value,
+          date: value.date ? new Date(value.date) : undefined
+        }
+      : {
+          date: dayjs().startOf('day').toDate()
+        };
+    form.setFieldsValue(result);
+  }, [value, form]);
 
-  const onFinish = async (values: ProductValues) => {
+  const onSaveForm = async (form: FormProps) => {
     try {
-      await addDiaryEntry({
-        weight: Number(values.weight),
-        date: values.date
-      }).unwrap();
-
+      const payload = {
+        id: value?.id,
+        weight: form.weight,
+        date: form.date?.toISOString()
+      };
+      const apiMethod = payload.id ? editDiaryEntry : addDiaryEntry;
+      await apiMethod(payload).unwrap();
       setFormDefaultValues();
-      // TODO
-      onSave(values);
+      onChange();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      if (!value?.id) {
+        return;
+      }
+      await deleteDiaryEntry(value.id).unwrap();
+      onChange();
     } catch (e) {
       console.error(e);
     }
@@ -50,18 +86,52 @@ export const ProductForm = (props: ProductFormProps) => {
     <Form
       form={form}
       footer={
-        <Button
-          block
-          type='submit'
-          color='primary'
-          size='large'
-          disabled={isLoading}
-          loading={isLoading}
-        >
-          Сохранить
-        </Button>
+        <Space block direction='vertical' style={{ '--gap': '16px' }}>
+          <Button
+            block
+            type='submit'
+            color='primary'
+            size='large'
+            disabled={isLoading}
+            loading={isLoading}
+          >
+            Сохранить
+          </Button>
+          {value?.id && (
+            <Button
+              block
+              color='danger'
+              size='large'
+              disabled={isLoading}
+              loading={isLoading}
+              onClick={() => {
+                Dialog.show({
+                  content: 'Вы действительно хотите удалить запись в дневнике?',
+                  closeOnAction: true,
+                  actions: [
+                    [
+                      {
+                        key: 'cancel',
+                        text: 'Нет'
+                      },
+                      {
+                        key: 'delete',
+                        text: 'Удалить',
+                        danger: true,
+                        bold: true,
+                        onClick: () => onDelete()
+                      }
+                    ]
+                  ]
+                });
+              }}
+            >
+              Удалить
+            </Button>
+          )}
+        </Space>
       }
-      onFinish={onFinish}
+      onFinish={onSaveForm}
     >
       <Form.Header>Добавить в дневник</Form.Header>
 

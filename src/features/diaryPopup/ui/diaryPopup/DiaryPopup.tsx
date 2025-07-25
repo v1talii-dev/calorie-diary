@@ -1,24 +1,24 @@
 import { Popup } from 'antd-mobile';
-import type { ProductValues } from '../../model/types';
 // import { FoodList } from '../foodList/FoodList.tsx';
 import { ProductForm } from '../productForm/ProductForm.tsx';
+import type { DiaryRecord } from '@/entities/diary';
 
 interface DiaryPopupProps {
   isOpen: boolean;
+  value?: DiaryRecord;
   onClose: () => void;
 }
 
 export const DiaryPopup = (props: DiaryPopupProps) => {
-  const { isOpen, onClose } = props;
+  const { isOpen, value, onClose } = props;
 
-  const onSaveProductForm = (values: ProductValues) => {
-    console.log({ values });
+  const onChangeProductForm = () => {
     onClose();
   };
 
   return (
     <Popup visible={isOpen} onMaskClick={onClose}>
-      <ProductForm onSave={onSaveProductForm} />
+      <ProductForm value={value} onChange={onChangeProductForm} />
       {/*<FoodList />*/}
     </Popup>
   );
