@@ -32,7 +32,7 @@ export const DiaryList = (props: DiaryListProps) => {
           // extra={getCaloriesValue()}
           onClick={() => onClickItem(item)}
         >
-          TODO: product name...
+          TODO: product name {new Date(item.date).toLocaleString()}
         </List.Item>
       ))}
     </List>

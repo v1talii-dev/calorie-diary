@@ -7,9 +7,4 @@ export type DiaryEntry = {
   uid: string;
 };
 
-export type DiaryRecord = {
-  id: string;
-  date: string;
-  weight: number;
-  uid: string;
-};
+export type DiaryRecord = { date: string } & Omit<DiaryEntry, 'date'>;
