@@ -14,5 +14,5 @@ export const getCaloriesPerPortion = (
   if (!energy) {
     return '';
   }
-  return `${getCaloriesValue(energy)} / ${getWeightValue(portion)}`;
+  return `${getCaloriesValue(Math.floor(energy))} / ${getWeightValue(portion)}`;
 };

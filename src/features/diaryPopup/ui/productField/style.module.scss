@@ -1,3 +1,19 @@
-.nutrients {
-  font-size: 12px;
+.formField {
+  :global {
+    .adm-list-body {
+      border: none;
+
+      .adm-list-item {
+        padding: 0;
+
+        &-content {
+          padding: 0;
+
+          &-main {
+            padding: 6px 0;
+          }
+        }
+      }
+    }
+  }
 }
