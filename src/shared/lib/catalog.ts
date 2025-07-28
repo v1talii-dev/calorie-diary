@@ -1,3 +1,4 @@
-export const getCaloriesValue = (value: number) => `${value} кал`;
+export const getCaloriesValue = (value: number) =>
+  value ? `${value} ккал` : '';
 
-export const getWeightValue = (value: number) => `${value} г`;
+export const getWeightValue = (value: number) => (value ? `${value} г` : '');

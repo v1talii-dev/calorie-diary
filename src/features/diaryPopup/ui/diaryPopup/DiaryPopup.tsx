@@ -1,5 +1,4 @@
 import { Popup } from 'antd-mobile';
-// import { FoodList } from '../foodList/FoodList.tsx';
 import { ProductForm } from '../productForm/ProductForm.tsx';
 import type { DiaryRecord } from '@/entities/diary';
 
@@ -19,7 +18,6 @@ export const DiaryPopup = (props: DiaryPopupProps) => {
   return (
     <Popup visible={isOpen} onMaskClick={onClose}>
       <ProductForm value={value} onChange={onChangeProductForm} />
-      {/*<FoodList />*/}
     </Popup>
   );
 };

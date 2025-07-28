@@ -15,6 +15,7 @@ import {
   useDeleteDiaryEntryMutation,
   useEditDiaryEntryMutation
 } from '@/entities/diary';
+import { ProductField } from '@/features/diaryPopup/ui/productField/ProductField.tsx';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
 
 interface ProductFormProps {
@@ -136,6 +137,10 @@ export const ProductForm = (props: ProductFormProps) => {
       <Form.Header>
         {value?.id ? 'Обновить запись в дневнике' : 'Добавить в дневник'}
       </Form.Header>
+
+      <Form.Item name='product' label='Продукт' rules={[{ required: true }]}>
+        <ProductField />
+      </Form.Item>
 
       <Form.Item name='weight' label='Вес' rules={[{ required: true }]}>
         <Input
