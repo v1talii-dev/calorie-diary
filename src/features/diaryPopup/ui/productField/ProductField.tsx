@@ -2,7 +2,7 @@ import { Button, List, Popup } from 'antd-mobile';
 import { useState } from 'react';
 import cls from './style.module.scss';
 import { type Product, useGetFoodsQuery } from '@/entities/product';
-import { getCaloriesValue, getWeightValue } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
 
 interface ProductFieldProps {
@@ -18,15 +18,6 @@ export const ProductField = (props: ProductFieldProps) => {
   const onClickProduct = (product: Product) => {
     onChange?.(product);
     setVisiblePopup(false);
-  };
-
-  const getCalories = (product: Product) => {
-    if (!product.nutriments?.['energy-kcal_100g']) {
-      return '';
-    }
-    return `${getCaloriesValue(
-      product.nutriments?.['energy-kcal_100g']
-    )} / ${getWeightValue(100)}`;
   };
 
   const getNutrients = (product: Product) => {
@@ -58,6 +49,9 @@ export const ProductField = (props: ProductFieldProps) => {
   return (
     <>
       <div>{value?.product_name}</div>
+      <div>
+        {getCaloriesPerPortion(value?.nutriments?.['energy-kcal_100g'] || 0)}
+      </div>
 
       <Button
         onClick={() => {
@@ -80,7 +74,9 @@ export const ProductField = (props: ProductFieldProps) => {
           {foods?.products?.map(product => (
             <List.Item
               key={product.id}
-              description={getCalories(product)}
+              description={getCaloriesPerPortion(
+                product.nutriments?.['energy-kcal_100g'] || 0
+              )}
               extra={getNutrients(product)}
               onClick={() => onClickProduct(product)}
             >
