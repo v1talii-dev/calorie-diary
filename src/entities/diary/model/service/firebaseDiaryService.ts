@@ -16,7 +16,9 @@ import { rtkQueryApi } from '@/shared/api/rtkQuery';
 
 const getDiaryValues = (payload: Partial<DiaryRecord>) => ({
   uid: auth.currentUser?.uid,
+  product: payload.product,
   weight: payload.weight,
+  calories: payload.calories,
   date: payload.date ? Timestamp.fromDate(new Date(payload.date)) : undefined
 });
 

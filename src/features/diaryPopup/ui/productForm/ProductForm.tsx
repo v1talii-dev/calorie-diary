@@ -9,14 +9,15 @@ import {
 } from 'antd-mobile';
 import dayjs from 'dayjs';
 import { type RefObject, useCallback, useEffect } from 'react';
+import { ProductField } from '../productField/ProductField.tsx';
 import {
   type DiaryRecord,
   useAddDiaryEntryMutation,
   useDeleteDiaryEntryMutation,
   useEditDiaryEntryMutation
 } from '@/entities/diary';
-import { ProductField } from '@/features/diaryPopup/ui/productField/ProductField.tsx';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
+import { getCalculatedCalories } from '@/shared/lib/catalog.ts';
 
 interface ProductFormProps {
   value?: DiaryRecord;
@@ -44,18 +45,23 @@ export const ProductForm = (props: ProductFormProps) => {
           date: value.date ? new Date(value.date) : undefined
         }
       : {
+          product: undefined,
           weight: '',
+          calories: undefined,
           date: dayjs().startOf('day').toDate()
         };
     form.setFieldsValue(result);
   }, [value, form]);
 
-  const onSaveForm = async (form: FormProps) => {
+  const onSaveForm = async () => {
     try {
+      const formProps = form.getFieldsValue(true);
       const payload = {
-        id: value?.id,
-        weight: Number(form.weight),
-        date: form.date?.toISOString()
+        id: formProps?.id,
+        product: formProps.product,
+        weight: Number(formProps.weight),
+        calories: formProps.calories,
+        date: formProps.date?.toISOString()
       };
       const apiMethod = payload.id ? editDiaryEntry : addDiaryEntry;
       await apiMethod(payload).unwrap();
@@ -98,6 +104,7 @@ export const ProductForm = (props: ProductFormProps) => {
           >
             Сохранить
           </Button>
+
           {value?.id && (
             <Button
               block
@@ -164,6 +171,24 @@ export const ProductForm = (props: ProductFormProps) => {
           {value => (value ? dayjs(value).format(DATE_FORMAT) : '')}
         </DatePicker>
       </Form.Item>
+
+      <Form.Subscribe to={['weight', 'product']}>
+        {({ weight, product }, form) => {
+          const result = getCalculatedCalories(
+            Number(weight),
+            product?.nutriments?.['energy-kcal_100g']
+          );
+          form.setFieldValue('calories', result);
+          return (
+            <Form.Item label='Всего калорий'>
+              <Input
+                value={form.getFieldValue('calories')}
+                readOnly={true}
+              ></Input>
+            </Form.Item>
+          );
+        }}
+      </Form.Subscribe>
     </Form>
   );
 };

@@ -1,7 +1,7 @@
 import { ErrorBlock, List, Skeleton } from 'antd-mobile';
 import cls from './style.module.scss';
 import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
-import { getWeightValue } from '@/shared/lib/catalog.ts';
+import { getCaloriesValue, getWeightValue } from '@/shared/lib/catalog.ts';
 
 interface DiaryListProps {
   onClickItem: (item: DiaryRecord) => void;
@@ -29,10 +29,10 @@ export const DiaryList = (props: DiaryListProps) => {
         <List.Item
           key={item.id}
           description={getWeightValue(item.weight)}
-          // extra={getCaloriesValue()}
+          extra={getCaloriesValue(item.calories)}
           onClick={() => onClickItem(item)}
         >
-          TODO: product name {new Date(item.date).toLocaleString()}
+          {item.product?.product_name}
         </List.Item>
       ))}
     </List>
