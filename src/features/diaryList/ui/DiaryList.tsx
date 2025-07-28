@@ -1,19 +1,19 @@
 import { ErrorBlock, List, Skeleton } from 'antd-mobile';
-import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
+import { getFilters } from '@/pages/diary';
 import { getCaloriesValue, getWeightValue } from '@/shared/lib/catalog.ts';
 
 interface DiaryListProps {
   onClickItem: (item: DiaryRecord) => void;
 }
 
-const currentDate = dayjs();
-
 export const DiaryList = (props: DiaryListProps) => {
   const { onClickItem } = props;
+  const filters = useSelector(getFilters);
   const { data, error, isLoading } = useGetDiaryEntriesQuery({
-    date: currentDate.toISOString()
+    date: filters.date
   });
 
   if (isLoading) {

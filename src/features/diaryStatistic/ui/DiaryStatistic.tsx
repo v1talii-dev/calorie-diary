@@ -1,18 +1,18 @@
 import { ProgressCircle } from 'antd-mobile';
-import dayjs from 'dayjs';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsQuery } from '@/entities/user';
+import { getFilters } from '@/pages/diary';
 import { getCaloriesValue } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
 
-const currentDate = dayjs();
-
 export const DiaryStatistic = () => {
+  const filters = useSelector(getFilters);
   const { data: userSettings } = useGetUserSettingsQuery();
   const { data: diary } = useGetDiaryEntriesQuery({
-    date: currentDate.toISOString()
+    date: filters.date
   });
 
   const percentageConsumption = useMemo<number>(() => {

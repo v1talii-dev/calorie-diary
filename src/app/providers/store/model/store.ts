@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { diaryReducer } from '@/pages/diary';
 import { rtkQueryApi } from '@/shared/api/rtkQuery.ts';
 
 export const store = configureStore({
   reducer: combineReducers({
+    diary: diaryReducer,
     [rtkQueryApi.reducerPath]: rtkQueryApi.reducer
   }),
   middleware: getDefaultMiddleware =>

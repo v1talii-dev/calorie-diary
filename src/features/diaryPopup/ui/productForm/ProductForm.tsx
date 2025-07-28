@@ -9,6 +9,7 @@ import {
 } from 'antd-mobile';
 import dayjs from 'dayjs';
 import { type RefObject, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { ProductField } from '../productField/ProductField.tsx';
 import {
   type DiaryRecord,
@@ -16,6 +17,7 @@ import {
   useDeleteDiaryEntryMutation,
   useEditDiaryEntryMutation
 } from '@/entities/diary';
+import { getFilters } from '@/pages/diary';
 import { DATE_FORMAT } from '@/shared/const/common.ts';
 import { getCalculatedCalories } from '@/shared/lib/catalog.ts';
 
@@ -29,6 +31,7 @@ type FormProps = Partial<
 
 export const ProductForm = (props: ProductFormProps) => {
   const { value, onChange } = props;
+  const filters = useSelector(getFilters);
   const [form] = Form.useForm<FormProps>();
   const [addDiaryEntry, { isLoading: isLoadingAdd }] =
     useAddDiaryEntryMutation();
@@ -49,10 +52,10 @@ export const ProductForm = (props: ProductFormProps) => {
           product: undefined,
           weight: '',
           calories: undefined,
-          date: dayjs().startOf('day').toDate()
+          date: dayjs(filters.date).startOf('day').toDate()
         };
     form.setFieldsValue(result);
-  }, [value, form]);
+  }, [value, form, filters]);
 
   const onSaveForm = async () => {
     try {
