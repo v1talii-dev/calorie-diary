@@ -27,7 +27,7 @@ export const DiaryContent = () => {
   return (
     <AppFlex gap={8} fullWidth={true}>
       <AppFlex direction='row' align='center' justify='space-between'>
-        <div>Употреблено</div>
+        <div>Дневник продуктов</div>
         <Button
           color='primary'
           fill='none'

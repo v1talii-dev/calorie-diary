@@ -45,6 +45,7 @@ export const ProductForm = (props: ProductFormProps) => {
           date: value.date ? new Date(value.date) : undefined
         }
       : {
+          id: undefined,
           product: undefined,
           weight: '',
           calories: undefined,
