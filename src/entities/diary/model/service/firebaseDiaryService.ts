@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   addDoc,
   collection,
@@ -26,15 +27,26 @@ const diaryApi = rtkQueryApi
   .enhanceEndpoints({ addTagTypes: ['diary'] })
   .injectEndpoints({
     endpoints: build => ({
-      getDiaryEntries: build.query<DiaryRecord[], void>({
-        async queryFn(_arg, _queryApi, _extraOptions, _fetchWithBQ) {
+      getDiaryEntries: build.query<
+        { entries: DiaryRecord[]; totalCalories: number },
+        { date: string }
+      >({
+        async queryFn({ date }, _queryApi, _extraOptions, _fetchWithBQ) {
           try {
+            const startOfDay = dayjs(date).startOf('day').toDate();
+            const endOfDay = dayjs(date).endOf('day').toDate();
+            const startTimestamp = Timestamp.fromDate(startOfDay);
+            const endTimestamp = Timestamp.fromDate(endOfDay);
+
             const q = query(
               collection(db, 'diary'),
               where('uid', '==', auth.currentUser?.uid),
+              where('date', '>=', startTimestamp),
+              where('date', '<=', endTimestamp),
               orderBy('date', 'desc')
             );
             const snapshot = await getDocs(q);
+
             const result = snapshot.docs.map(doc => {
               const data = doc.data() as Omit<DiaryEntry, 'id'>;
               return {
@@ -43,7 +55,13 @@ const diaryApi = rtkQueryApi
                 date: data.date.toDate().toISOString()
               };
             });
-            return { data: result };
+
+            const totalCalories = snapshot.docs.reduce((sum, doc) => {
+              const data = doc.data() as DiaryEntry;
+              return sum + (data.calories || 0);
+            }, 0);
+
+            return { data: { entries: result, totalCalories } };
           } catch (error) {
             console.error(error);
             return {
