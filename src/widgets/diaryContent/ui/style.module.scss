@@ -1,5 +1,7 @@
 .filterForm {
-  :global(.adm-list) {
-    margin: 0;
+  :global {
+    .adm-list {
+      margin: 0;
+    }
   }
 }
