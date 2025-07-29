@@ -4,14 +4,16 @@ import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
+import { StatisticSkeleton } from '@/features/diaryStatistic/ui/statisticSkeleton/StatisticSkeleton.tsx';
 import { getFilters } from '@/pages/diary';
 import { getCaloriesValue } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
 
 export const DiaryStatistic = () => {
   const filters = useSelector(getFilters);
-  const { data: userSettings } = useGetUserSettingsEntryQuery();
-  const { data: diary } = useGetDiaryEntriesQuery({
+  const { data: userSettings, isFetching: isFetchingUserSettings } =
+    useGetUserSettingsEntryQuery();
+  const { data: diary, isFetching: isFetchingDiary } = useGetDiaryEntriesQuery({
     date: filters.date
   });
 
@@ -32,6 +34,10 @@ export const DiaryStatistic = () => {
     const result = userSettings?.calories_limit - diary?.totalCalories;
     return result < 0 ? 0 : result;
   }, [userSettings, diary]);
+
+  if (isFetchingUserSettings || isFetchingDiary) {
+    return <StatisticSkeleton />;
+  }
 
   return (
     <AppFlex align='center'>

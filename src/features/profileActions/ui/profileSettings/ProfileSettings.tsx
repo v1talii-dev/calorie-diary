@@ -51,9 +51,9 @@ export const ProfileSettings = () => {
 
       <Popup
         visible={visible}
+        destroyOnClose
         position='bottom'
         onMaskClick={() => setVisible(false)}
-        bodyStyle={{ padding: '16px' }}
       >
         <Form
           form={form}

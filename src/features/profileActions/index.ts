@@ -1,1 +1,1 @@
-export { ProfileActions } from './ui/ProfileActions.tsx';
+export { ProfileActions } from './ui/profileActions/ProfileActions.tsx';

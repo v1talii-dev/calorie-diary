@@ -46,14 +46,15 @@ export const ProductField = (props: ProductFieldProps) => {
 
       <Popup
         visible={visiblePopup}
+        destroyOnClose
         onMaskClick={() => setVisiblePopup(false)}
         onClose={() => setVisiblePopup(false)}
       >
         <CapsuleTabs className={cls.tabsContainer}>
-          <CapsuleTabs.Tab title='Недавние' key='productLatest'>
+          <CapsuleTabs.Tab title='Недавние' key='productLatest' destroyOnClose>
             <ProductRecent onChange={onChangeProduct}></ProductRecent>
           </CapsuleTabs.Tab>
-          <CapsuleTabs.Tab title='Поиск' key='productSearch'>
+          <CapsuleTabs.Tab title='Поиск' key='productSearch' destroyOnClose>
             <ProductSearch onChange={onChangeProduct}></ProductSearch>
           </CapsuleTabs.Tab>
         </CapsuleTabs>

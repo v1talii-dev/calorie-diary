@@ -5,22 +5,30 @@ import { useGetUserSettingsEntryQuery } from '@/entities/user';
 import { ProfileActions } from '@/features/profileActions';
 import { auth } from '@/shared/api/firebase.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
+import { AppFormSkeleton } from '@/shared/ui/appSkeleton';
 
 export const ProfilePage = memo(() => {
-  const { data: userSettings } = useGetUserSettingsEntryQuery();
+  const { data: userSettings, isFetching: isFetchingUserSettings } =
+    useGetUserSettingsEntryQuery();
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({
-      email: auth?.currentUser?.email,
-      calorie_limit: userSettings?.calories_limit
-    });
-  }, [form, userSettings]);
+    if (!isFetchingUserSettings) {
+      form.setFieldsValue({
+        email: auth?.currentUser?.email,
+        calorie_limit: userSettings?.calories_limit
+      });
+    }
+  }, [form, userSettings, isFetchingUserSettings]);
+
+  if (isFetchingUserSettings) {
+    return <AppFormSkeleton count={3} />;
+  }
 
   return (
     <AppFlex>
       <Form form={form} mode='card' className={cls.profileForm}>
-        <Form.Item label='Email' name='email'>
+        <Form.Item label='Электронная почта' name='email'>
           <Input readOnly></Input>
         </Form.Item>
         <Form.Item label='Лимит калорий на день' name='calorie_limit'>

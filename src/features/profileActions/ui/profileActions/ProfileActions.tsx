@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ProfileLogout } from './ProfileLogout.tsx';
-import { ProfileSettings } from './ProfileSettings.tsx';
+import { ProfileLogout } from '../profileLogout/ProfileLogout.tsx';
+import { ProfileSettings } from '../profileSettings/ProfileSettings.tsx';
 import { AppFlex } from '@/shared/ui/appFlex';
 
 export const ProfileActions = memo(() => {

@@ -4,6 +4,7 @@ import cls from './style.module.scss';
 import { type Product, useGetFoodsInfiniteQuery } from '@/entities/product';
 import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
+import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface ProductFieldProps {
   onChange?: (value: Product) => void;
@@ -12,10 +13,21 @@ interface ProductFieldProps {
 export const ProductSearch = (props: ProductFieldProps) => {
   const { onChange } = props;
   const [filterSearch, setFilterSearch] = useState<string>('');
-  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useGetFoodsInfiniteQuery({
+  const {
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage
+  } = useGetFoodsInfiniteQuery(
+    {
       search: filterSearch
-    });
+    },
+    {
+      skip: !filterSearch
+    }
+  );
 
   const products = useMemo(() => {
     return (
@@ -46,8 +58,12 @@ export const ProductSearch = (props: ProductFieldProps) => {
         onClear={() => setFilterSearch('')}
       />
 
-      {!products.length ? (
-        <ErrorBlock status='empty' title='Ничего не найдено' description='' />
+      {isFetching && !isFetchingNextPage ? (
+        <AppListSkeleton />
+      ) : error ? (
+        <ErrorBlock status='default' description={JSON.stringify(error)} />
+      ) : !filterSearch || !products.length ? (
+        <ErrorBlock status='empty' title='Выполните поиск' description='' />
       ) : (
         <List key={filterSearch} className={cls.productList}>
           {products.map(product => (

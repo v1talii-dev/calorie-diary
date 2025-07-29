@@ -1,10 +1,11 @@
-import { ErrorBlock, List, Skeleton } from 'antd-mobile';
+import { ErrorBlock, List } from 'antd-mobile';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
 import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
+import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface DiaryListProps {
   onClickItem: (item: DiaryRecord) => void;
@@ -13,16 +14,16 @@ interface DiaryListProps {
 export const DiaryList = (props: DiaryListProps) => {
   const { onClickItem } = props;
   const filters = useSelector(getFilters);
-  const { data, error, isLoading } = useGetDiaryEntriesQuery({
+  const { data, error, isFetching } = useGetDiaryEntriesQuery({
     date: filters.date
   });
 
-  if (isLoading) {
-    return <Skeleton.Paragraph lineCount={5} animated />;
+  if (isFetching) {
+    return <AppListSkeleton />;
   }
 
   if (error) {
-    return <ErrorBlock status='default' />;
+    return <ErrorBlock status='default' description={JSON.stringify(error)} />;
   }
 
   if (!data?.entries?.length) {

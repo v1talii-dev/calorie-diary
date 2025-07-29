@@ -13,7 +13,7 @@ const openFoodFactsApi = rtkQueryApi.injectEndpoints({
       infiniteQueryOptions: {
         initialPageParam: {
           page: 1,
-          size: 10
+          size: 20
         },
         getNextPageParam: (firstPage, _, lastPageParam) => {
           if (firstPage.page_size * firstPage.page >= firstPage.count) {
@@ -28,6 +28,14 @@ const openFoodFactsApi = rtkQueryApi.injectEndpoints({
       query: ({ queryArg, pageParam }) => ({
         url: `${BASE_URL}/cgi/search.pl`,
         params: {
+          fields: [
+            'id',
+            'product_name',
+            'nutriments.proteins_100g',
+            'nutriments.fat_100g',
+            'nutriments.carbohydrates_100g',
+            'nutriments.energy-kcal_100g'
+          ].join(','),
           search_terms: queryArg.search,
           page: pageParam.page,
           page_size: pageParam.size,
@@ -40,10 +48,10 @@ const openFoodFactsApi = rtkQueryApi.injectEndpoints({
           id: el.id,
           product_name: el.product_name,
           nutriments: {
-            proteins_100g: el.nutriments.proteins_100g ?? null,
-            fat_100g: el.nutriments.fat_100g ?? null,
-            carbohydrates_100g: el.nutriments.carbohydrates_100g ?? null,
-            'energy-kcal_100g': el.nutriments['energy-kcal_100g'] ?? null
+            proteins_100g: el.nutriments?.proteins_100g ?? null,
+            fat_100g: el.nutriments?.fat_100g ?? null,
+            carbohydrates_100g: el.nutriments?.carbohydrates_100g ?? null,
+            'energy-kcal_100g': el.nutriments?.['energy-kcal_100g'] ?? null
           }
         }))
       })
