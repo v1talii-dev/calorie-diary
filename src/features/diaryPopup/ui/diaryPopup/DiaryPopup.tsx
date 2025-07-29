@@ -16,7 +16,7 @@ export const DiaryPopup = (props: DiaryPopupProps) => {
   };
 
   return (
-    <Popup visible={isOpen} onMaskClick={onClose}>
+    <Popup visible={isOpen} destroyOnClose={true} onMaskClick={onClose}>
       <ProductForm value={value} onChange={onChangeProductForm} />
     </Popup>
   );

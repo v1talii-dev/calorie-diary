@@ -1,5 +1,5 @@
 import { CapsuleTabs, List, Popup } from 'antd-mobile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductRecent } from '../productRecent/ProductRecent.tsx';
 import { ProductSearch } from '../productSearch/ProductSearch.tsx';
 import cls from './style.module.scss';
@@ -8,12 +8,13 @@ import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
 
 interface ProductFieldProps {
   value?: Product;
+  openOnInit?: boolean;
   onChange?: (product: Product) => void;
   onChangeWeight?: (weight?: number) => void;
 }
 
 export const ProductField = (props: ProductFieldProps) => {
-  const { value, onChange, onChangeWeight } = props;
+  const { value, openOnInit, onChange, onChangeWeight } = props;
   const [visiblePopup, setVisiblePopup] = useState(false);
 
   const onChangeProduct = (product: Product, weight?: number) => {
@@ -21,6 +22,12 @@ export const ProductField = (props: ProductFieldProps) => {
     onChangeWeight?.(weight);
     setVisiblePopup(false);
   };
+
+  useEffect(() => {
+    if (openOnInit) {
+      setVisiblePopup(true);
+    }
+  }, []);
 
   return (
     <>

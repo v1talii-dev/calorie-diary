@@ -153,7 +153,7 @@ export const ProductForm = (props: ProductFormProps) => {
       </Form.Header>
 
       <Form.Item name='product' label='Продукт' rules={[{ required: true }]}>
-        <ProductField onChangeWeight={onChangeWeight} />
+        <ProductField openOnInit={!value?.id} onChangeWeight={onChangeWeight} />
       </Form.Item>
 
       <Form.Item name='weight' label='Вес' rules={[{ required: true }]}>
