@@ -17,3 +17,11 @@
     }
   }
 }
+
+.tabsContainer {
+  height: 70vh;
+
+  .tabContent {
+    height: calc(100% - 58px);
+  }
+}

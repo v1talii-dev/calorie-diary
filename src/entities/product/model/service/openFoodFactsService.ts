@@ -5,12 +5,32 @@ const BASE_URL = '/api/openfoodfacts';
 
 const openFoodFactsApi = rtkQueryApi.injectEndpoints({
   endpoints: build => ({
-    getFoods: build.query<ProductList, string>({
-      query: search => ({
+    getFoods: build.infiniteQuery<
+      ProductList,
+      { search?: string },
+      { page: number; size: number }
+    >({
+      infiniteQueryOptions: {
+        initialPageParam: {
+          page: 1,
+          size: 10
+        },
+        getNextPageParam: (firstPage, _, lastPageParam) => {
+          if (firstPage.page_size * firstPage.page >= firstPage.count) {
+            return undefined;
+          }
+          return {
+            ...lastPageParam,
+            page: lastPageParam.page + 1
+          };
+        }
+      },
+      query: ({ queryArg, pageParam }) => ({
         url: `${BASE_URL}/cgi/search.pl`,
         params: {
-          search_terms: search,
-          page_size: 10,
+          search_terms: queryArg.search,
+          page: pageParam.page,
+          page_size: pageParam.size,
           json: 1
         }
       }),
@@ -31,4 +51,4 @@ const openFoodFactsApi = rtkQueryApi.injectEndpoints({
   })
 });
 
-export const { useGetFoodsQuery } = openFoodFactsApi;
+export const { useGetFoodsInfiniteQuery } = openFoodFactsApi;
