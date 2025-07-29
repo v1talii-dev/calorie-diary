@@ -4,7 +4,7 @@ export interface AuthProps {
 }
 
 export interface UserSettingsEntry {
-  id: string;
-  uid: string;
+  id?: string;
+  uid?: string;
   calories_limit?: number;
 }

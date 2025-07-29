@@ -13,6 +13,7 @@ import {
   where
 } from 'firebase/firestore';
 import { type DiaryEntry, type DiaryRecord } from '../../types';
+// TODO: не реактивный auth, при смене юзера, RTK не обновляет данные
 import { auth, db } from '@/shared/api/firebase.ts';
 import { rtkQueryApi } from '@/shared/api/rtkQuery';
 

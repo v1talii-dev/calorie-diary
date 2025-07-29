@@ -8,19 +8,21 @@ import {
   where
 } from 'firebase/firestore';
 import { type UserSettingsEntry } from '../../types';
+// TODO: не реактивный auth, при смене юзера, RTK не обновляет данные
 import { auth, db } from '@/shared/api/firebase.ts';
 import { rtkQueryApi } from '@/shared/api/rtkQuery';
+import { CALORIES_LIMIT } from '@/shared/const/entites.ts';
 
 const getUserSettingsValues = (payload: Partial<UserSettingsEntry>) => ({
   uid: auth.currentUser?.uid,
-  calories_limit: payload.calories_limit
+  calories_limit: payload?.calories_limit
 });
 
 const userSettingsApi = rtkQueryApi
   .enhanceEndpoints({ addTagTypes: ['user_settings'] })
   .injectEndpoints({
     endpoints: build => ({
-      getUserSettingsEntry: build.query<UserSettingsEntry | null, void>({
+      getUserSettingsEntry: build.query<UserSettingsEntry, void>({
         async queryFn(_arg, _queryApi, _extraOptions, _fetchWithBQ) {
           try {
             const q = query(
@@ -40,7 +42,11 @@ const userSettingsApi = rtkQueryApi
               };
             }
 
-            return { data: null };
+            return {
+              data: {
+                calories_limit: CALORIES_LIMIT
+              }
+            };
           } catch (error) {
             console.error(error);
             return {
