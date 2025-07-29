@@ -1,14 +1,13 @@
-import { Button, DatePicker, type DatePickerRef, Form } from 'antd-mobile';
-import { AddSquareOutline } from 'antd-mobile-icons';
-import dayjs from 'dayjs';
-import { type RefObject, useCallback, useMemo, useState } from 'react';
+import { Button, Form } from 'antd-mobile';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FiltersSkeleton } from '../filtersSkeleton/FiltersSkeleton.tsx';
 import cls from './style.module.scss';
-import type { DiaryRecord } from '@/entities/diary';
+import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { DiaryList } from '@/features/diaryList';
 import { DiaryPopup } from '@/features/diaryPopup';
 import { type DiaryFilters, getFilters, setFilters } from '@/pages/diary';
-import { DATE_FORMAT } from '@/shared/const/common.ts';
+import { AppDatePicker } from '@/shared/ui/appDatePicker/AppDatePicker.tsx';
 import { AppFlex } from '@/shared/ui/appFlex';
 
 export const DiaryContent = () => {
@@ -16,6 +15,7 @@ export const DiaryContent = () => {
   const [isOpenDiaryPopup, setIsOpenDiaryPopup] = useState(false);
   const [currentDiary, setCurrentDiary] = useState<DiaryRecord>();
   const filters = useSelector(getFilters);
+  const { isFetching } = useGetDiaryEntriesQuery({ date: filters.date });
 
   const formFilters = useMemo(() => {
     return {
@@ -50,35 +50,25 @@ export const DiaryContent = () => {
 
   return (
     <AppFlex gap={8} fullWidth={true}>
-      <AppFlex direction='row' align='center' justify='space-between'>
-        <Form
-          className={cls.filterForm}
-          mode='card'
-          initialValues={formFilters}
-          onValuesChange={onChangeFilters}
-        >
-          <Form.Item
-            name='date'
-            trigger='onConfirm'
-            onClick={(__, datePickerRef: RefObject<DatePickerRef>) => {
-              datePickerRef.current?.open();
-            }}
+      {isFetching ? (
+        <FiltersSkeleton />
+      ) : (
+        <AppFlex direction='row' align='center' justify='space-between'>
+          <Form
+            className={cls.filterForm}
+            initialValues={formFilters}
+            onValuesChange={onChangeFilters}
           >
-            <DatePicker>
-              {value => (value ? dayjs(value).format(DATE_FORMAT) : '')}
-            </DatePicker>
-          </Form.Item>
-        </Form>
+            <Form.Item name='date' noStyle>
+              <AppDatePicker />
+            </Form.Item>
+          </Form>
 
-        <Button
-          color='primary'
-          fill='none'
-          size='mini'
-          onClick={() => onOpenDiaryPopup()}
-        >
-          <AddSquareOutline fontSize={32} />
-        </Button>
-      </AppFlex>
+          <Button color='primary' onClick={() => onOpenDiaryPopup()}>
+            Добавить
+          </Button>
+        </AppFlex>
+      )}
 
       <DiaryList onClickItem={onClickItem} />
 

@@ -1,1 +1,1 @@
-export { DiaryContent } from './ui/DiaryContent.tsx';
+export { DiaryContent } from './ui/diaryContent/DiaryContent.tsx';

@@ -1,0 +1,13 @@
+.filterForm {
+  :global {
+    .adm-list {
+      .adm-list-body {
+        border: none;
+
+        &-inner {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
