@@ -1,7 +1,7 @@
 import { type Product, type ProductList } from '../../types';
 import { rtkQueryApi } from '@/shared/api/rtkQuery';
 
-const BASE_URL = '/api/openfoodfacts';
+const BASE_URL = 'https://world.openfoodfacts.org';
 
 const openFoodFactsApi = rtkQueryApi.injectEndpoints({
   endpoints: build => ({
