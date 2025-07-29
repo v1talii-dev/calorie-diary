@@ -4,7 +4,7 @@ import { ProductRecent } from '../productRecent/ProductRecent.tsx';
 import { ProductSearch } from '../productSearch/ProductSearch.tsx';
 import cls from './style.module.scss';
 import { type Product } from '@/entities/product';
-import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 
 interface ProductFieldProps {
   value?: Product;
@@ -40,7 +40,7 @@ export const ProductField = (props: ProductFieldProps) => {
             setVisiblePopup(true);
           }}
         >
-          {value ? value?.product_name : 'Выбрать продукт'}
+          {value ? getProductName(value) : 'Выбрать продукт'}
         </List.Item>
       </List>
 

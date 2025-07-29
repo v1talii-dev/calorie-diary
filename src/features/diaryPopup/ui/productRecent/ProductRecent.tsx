@@ -5,7 +5,7 @@ import {
   useGetRecentDiaryEntriesQuery
 } from '@/entities/diary';
 import { type Product } from '@/entities/product';
-import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface ProductRecentProps {
@@ -41,7 +41,7 @@ export const ProductRecent = (props: ProductRecentProps) => {
           description={getCaloriesPerPortion(item.calories, item.weight)}
           onClick={() => onClickProduct(item)}
         >
-          {item.product?.product_name}
+          {getProductName(item.product)}
         </List.Item>
       ))}
     </List>

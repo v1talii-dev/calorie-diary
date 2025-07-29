@@ -1,3 +1,5 @@
+import type { Product } from '@/entities/product';
+
 export const getCaloriesValue = (value?: number) =>
   value ? `${value} ккал` : '';
 
@@ -15,4 +17,15 @@ export const getCaloriesPerPortion = (
     return '';
   }
   return `${getCaloriesValue(Math.floor(energy))} / ${getWeightValue(portion)}`;
+};
+
+export const getProductName = (product: Product) => {
+  const result: string[] = [];
+  if (product?.brands) {
+    result.push(product.brands);
+  }
+  if (product?.product_name) {
+    result.push(product.product_name);
+  }
+  return result.join(' / ').replace(/&quot;/g, '"');
 };

@@ -1,6 +1,7 @@
 export interface Product {
   id: string;
-  product_name: string;
+  product_name?: string;
+  brands?: string;
   nutriments: {
     proteins_100g: number | null;
     fat_100g: number | null;

@@ -2,7 +2,7 @@ import { ErrorBlock, InfiniteScroll, List, SearchBar } from 'antd-mobile';
 import { useMemo, useState } from 'react';
 import cls from './style.module.scss';
 import { type Product, useGetFoodsInfiniteQuery } from '@/entities/product';
-import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
@@ -74,7 +74,7 @@ export const ProductSearch = (props: ProductFieldProps) => {
               )}
               onClick={() => onClickProduct(product)}
             >
-              {product.product_name}
+              {getProductName(product)}
             </List.Item>
           ))}
           <InfiniteScroll hasMore={hasNextPage} loadMore={onLoadMore} />

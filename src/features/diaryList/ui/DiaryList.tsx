@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
-import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface DiaryListProps {
@@ -39,7 +39,7 @@ export const DiaryList = (props: DiaryListProps) => {
           extra={dayjs(item.date).format('HH:mm')}
           onClick={() => onClickItem(item)}
         >
-          {item.product?.product_name}
+          {getProductName(item.product)}
         </List.Item>
       ))}
     </List>
