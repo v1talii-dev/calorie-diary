@@ -1,14 +1,6 @@
-import {
-  Button,
-  DatePicker,
-  type DatePickerRef,
-  Dialog,
-  Form,
-  Input,
-  Space
-} from 'antd-mobile';
+import { Button, Dialog, Form, Input, Space } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { type RefObject, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ProductField } from '../productField/ProductField.tsx';
 import {
@@ -18,7 +10,6 @@ import {
   useEditDiaryEntryMutation
 } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
-import { DATE_FORMAT } from '@/shared/const/common.ts';
 import { getCalculatedCalories } from '@/shared/lib/catalog.ts';
 
 interface ProductFormProps {
@@ -60,12 +51,20 @@ export const ProductForm = (props: ProductFormProps) => {
   const onSaveForm = async () => {
     try {
       const formProps = form.getFieldsValue(true);
+      const currentDate = dayjs();
       const payload = {
         id: formProps?.id,
         product: formProps.product,
         weight: Number(formProps.weight),
         calories: formProps.calories,
-        date: formProps.date?.toISOString()
+        date: formProps?.id
+          ? formProps.date?.toISOString()
+          : dayjs(formProps.date)
+              .set('hour', currentDate.hour())
+              .set('minute', currentDate.minute())
+              .set('second', currentDate.second())
+              .set('millisecond', currentDate.millisecond())
+              .toISOString()
       };
       const apiMethod = payload.id ? editDiaryEntry : addDiaryEntry;
       await apiMethod(payload).unwrap();
@@ -87,6 +86,10 @@ export const ProductForm = (props: ProductFormProps) => {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const onChangeWeight = (weight?: number) => {
+    form.setFieldValue('weight', weight ?? '');
   };
 
   useEffect(() => {
@@ -150,7 +153,7 @@ export const ProductForm = (props: ProductFormProps) => {
       </Form.Header>
 
       <Form.Item name='product' label='Продукт' rules={[{ required: true }]}>
-        <ProductField />
+        <ProductField onChangeWeight={onChangeWeight} />
       </Form.Item>
 
       <Form.Item name='weight' label='Вес' rules={[{ required: true }]}>
@@ -162,27 +165,13 @@ export const ProductForm = (props: ProductFormProps) => {
         />
       </Form.Item>
 
-      <Form.Item
-        name='date'
-        label='Дата'
-        rules={[{ required: true }]}
-        trigger='onConfirm'
-        onClick={(__, datePickerRef: RefObject<DatePickerRef>) => {
-          datePickerRef.current?.open();
-        }}
-      >
-        <DatePicker>
-          {value => (value ? dayjs(value).format(DATE_FORMAT) : '')}
-        </DatePicker>
-      </Form.Item>
-
       <Form.Subscribe to={['weight', 'product']}>
         {({ weight, product }, form) => {
           const result = getCalculatedCalories(
             Number(weight),
             product?.nutriments?.['energy-kcal_100g']
           );
-          form.setFieldValue('calories', result);
+          form.setFieldValue('calories', result > 0 ? result : '-');
           return (
             <Form.Item label='Всего калорий'>
               <Input

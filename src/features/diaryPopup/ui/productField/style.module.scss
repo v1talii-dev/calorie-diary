@@ -1,4 +1,8 @@
 .formField {
+  --padding-left: 0;
+  --padding-right: 0;
+  --font-size: var(--adm-font-size-main);
+
   :global {
     .adm-list-body {
       border: none;
@@ -21,7 +25,9 @@
 .tabsContainer {
   height: 70vh;
 
-  .tabContent {
-    height: calc(100% - 58px);
+  :global {
+    .adm-capsule-tabs-content {
+      height: calc(100% - 58px);
+    }
   }
 }

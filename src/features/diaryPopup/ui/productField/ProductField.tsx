@@ -1,21 +1,24 @@
 import { CapsuleTabs, List, Popup } from 'antd-mobile';
 import { useState } from 'react';
+import { ProductRecent } from '../productRecent/ProductRecent.tsx';
+import { ProductSearch } from '../productSearch/ProductSearch.tsx';
 import cls from './style.module.scss';
 import { type Product } from '@/entities/product';
-import { ProductSearch } from '@/features/diaryPopup/ui/productSearch/ProductSearch.tsx';
 import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
 
 interface ProductFieldProps {
   value?: Product;
-  onChange?: (value: Product) => void;
+  onChange?: (product: Product) => void;
+  onChangeWeight?: (weight?: number) => void;
 }
 
 export const ProductField = (props: ProductFieldProps) => {
-  const { value, onChange } = props;
+  const { value, onChange, onChangeWeight } = props;
   const [visiblePopup, setVisiblePopup] = useState(false);
 
-  const onChangeProduct = (product: Product) => {
+  const onChangeProduct = (product: Product, weight?: number) => {
     onChange?.(product);
+    onChangeWeight?.(weight);
     setVisiblePopup(false);
   };
 
@@ -40,18 +43,10 @@ export const ProductField = (props: ProductFieldProps) => {
         onClose={() => setVisiblePopup(false)}
       >
         <CapsuleTabs className={cls.tabsContainer}>
-          <CapsuleTabs.Tab
-            title='Недавние'
-            key='productLatest'
-            className={cls.tabContent}
-          >
-            TODO
+          <CapsuleTabs.Tab title='Недавние' key='productLatest'>
+            <ProductRecent onChange={onChangeProduct}></ProductRecent>
           </CapsuleTabs.Tab>
-          <CapsuleTabs.Tab
-            title='Поиск'
-            key='productSearch'
-            className={cls.tabContent}
-          >
+          <CapsuleTabs.Tab title='Поиск' key='productSearch'>
             <ProductSearch onChange={onChangeProduct}></ProductSearch>
           </CapsuleTabs.Tab>
         </CapsuleTabs>

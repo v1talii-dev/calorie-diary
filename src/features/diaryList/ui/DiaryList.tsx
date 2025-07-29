@@ -1,9 +1,10 @@
 import { ErrorBlock, List, Skeleton } from 'antd-mobile';
+import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
 import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
-import { getCaloriesValue, getWeightValue } from '@/shared/lib/catalog.ts';
+import { getCaloriesPerPortion } from '@/shared/lib/catalog.ts';
 
 interface DiaryListProps {
   onClickItem: (item: DiaryRecord) => void;
@@ -33,8 +34,8 @@ export const DiaryList = (props: DiaryListProps) => {
       {data.entries.map(item => (
         <List.Item
           key={item.id}
-          description={getWeightValue(item.weight)}
-          extra={getCaloriesValue(item.calories)}
+          description={getCaloriesPerPortion(item.calories, item.weight)}
+          extra={dayjs(item.date).format('HH:mm')}
           onClick={() => onClickItem(item)}
         >
           {item.product?.product_name}

@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
   orderBy,
   query,
   Timestamp,
@@ -75,6 +76,40 @@ const diaryApi = rtkQueryApi
         providesTags: ['diary']
       }),
 
+      getRecentDiaryEntries: build.query<{ entries: DiaryRecord[] }, void>({
+        async queryFn(_, _queryApi, _extraOptions, _fetchWithBQ) {
+          try {
+            const q = query(
+              collection(db, 'diary'),
+              where('uid', '==', auth.currentUser?.uid),
+              orderBy('date', 'desc'),
+              limit(100)
+            );
+            const snapshot = await getDocs(q);
+
+            const result = snapshot.docs.map(doc => {
+              const data = doc.data() as Omit<DiaryEntry, 'id'>;
+              return {
+                ...data,
+                id: doc.id,
+                date: data.date.toDate().toISOString()
+              };
+            });
+
+            return { data: { entries: result } };
+          } catch (error) {
+            console.error(error);
+            return {
+              error: {
+                status: 'CUSTOM_ERROR',
+                error: (error as Error).message || error
+              }
+            };
+          }
+        },
+        providesTags: ['diary']
+      }),
+
       addDiaryEntry: build.mutation<void, Partial<DiaryRecord>>({
         async queryFn(values) {
           try {
@@ -124,6 +159,7 @@ const diaryApi = rtkQueryApi
 
 export const {
   useGetDiaryEntriesQuery,
+  useGetRecentDiaryEntriesQuery,
   useAddDiaryEntryMutation,
   useEditDiaryEntryMutation,
   useDeleteDiaryEntryMutation
