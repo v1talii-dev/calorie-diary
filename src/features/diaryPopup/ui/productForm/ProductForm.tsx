@@ -1,6 +1,6 @@
 import { Button, Dialog, Form, Input, Space } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ProductField } from '../productField/ProductField.tsx';
 import {
@@ -24,6 +24,7 @@ export const ProductForm = (props: ProductFormProps) => {
   const { value, onChange } = props;
   const filters = useSelector(getFilters);
   const [form] = Form.useForm<FormProps>();
+  const [previousWeight, setPreviousWeight] = useState<string>('');
   const [addDiaryEntry, { isLoading: isLoadingAdd }] =
     useAddDiaryEntryMutation();
   const [editDiaryEntry, { isLoading: isLoadingEdit }] =
@@ -90,6 +91,17 @@ export const ProductForm = (props: ProductFormProps) => {
 
   const onChangeWeight = (weight?: number) => {
     form.setFieldValue('weight', weight ?? '');
+  };
+
+  const onClickWeight = () => {
+    setPreviousWeight(form.getFieldValue('weight'));
+    onChangeWeight(undefined);
+  };
+
+  const onBlurWeight = () => {
+    if (!form.getFieldValue('weight') && previousWeight) {
+      onChangeWeight(Number(previousWeight));
+    }
   };
 
   useEffect(() => {
@@ -160,8 +172,8 @@ export const ProductForm = (props: ProductFormProps) => {
         <Input
           placeholder='В граммах'
           type='number'
-          autoFocus={true}
-          clearable
+          onClick={onClickWeight}
+          onBlur={onBlurWeight}
         />
       </Form.Item>
 
