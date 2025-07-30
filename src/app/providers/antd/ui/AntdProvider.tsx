@@ -1,4 +1,4 @@
-import { ConfigProvider, unstableSetRender } from 'antd-mobile'; // Support since version ^5.40.0
+import { ConfigProvider, unstableSetRender } from 'antd-mobile';
 import { type PopupProps } from 'antd-mobile/es/components/popup';
 import ruRU from 'antd-mobile/es/locales/ru-RU';
 import { memo, type ReactNode } from 'react';
@@ -29,8 +29,6 @@ const customPopupStyle: Partial<PopupProps> = {
   }
 };
 
-// TODO: обновить пакет после выхода antd-mobile@^5.39.1. Сейчас используется временная сборка для поддержки react 19.
-// Подробнее: https://github.com/ant-design/ant-design-mobile/pull/6860
 export const AntdProvider = memo((props: AntdProviderProps) => {
   const { children } = props;
 
