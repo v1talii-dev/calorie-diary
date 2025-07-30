@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig(() => {
   return {
     plugins: [react()],
+    base: '/calorie-diary/',
     resolve: {
       alias: {
         '@': '/src'

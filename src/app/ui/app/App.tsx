@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { AntdProvider } from '../../providers/antd';
 import { FirebaseAuthProvider } from '../../providers/firebase';
 import { RouterProvider } from '../../providers/router';
@@ -13,11 +13,11 @@ export const App = () => {
     <FirebaseAuthProvider>
       <StoreProvider>
         <AntdProvider>
-          <BrowserRouter>
+          <HashRouter>
             <MainLayout top={<MainHeader />} bottom={<MainNavigation />}>
               <RouterProvider />
             </MainLayout>
-          </BrowserRouter>
+          </HashRouter>
         </AntdProvider>
       </StoreProvider>
     </FirebaseAuthProvider>
