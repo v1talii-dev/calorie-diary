@@ -65,6 +65,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
       <Form.Item
         label='Email'
         name='email'
+        validateTrigger='onBlur'
         rules={[
           { required: true, message: 'Пожалуйста, введите email' },
           { type: 'email', message: 'Неверный формат email' }
@@ -81,6 +82,7 @@ export const LoginForm = memo((props: LoginFormProps) => {
             {visible ? <EyeOutline /> : <EyeInvisibleOutline />}
           </Button>
         }
+        validateTrigger='onBlur'
         rules={[{ required: true, message: 'Пожалуйста, введите пароль' }]}
       >
         <Input
