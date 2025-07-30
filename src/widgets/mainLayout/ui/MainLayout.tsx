@@ -23,6 +23,7 @@ export const MainLayout = memo((props: MainLayoutProps) => {
         <>
           {user && top && (
             <div className={cls.top}>
+              <SafeArea position='top' />
               <div className={cls.section}>{top}</div>
             </div>
           )}
@@ -34,11 +35,11 @@ export const MainLayout = memo((props: MainLayoutProps) => {
           {user && bottom && (
             <div className={cls.bottom}>
               <div className={cls.section}>{bottom}</div>
+              <SafeArea position='bottom' />
             </div>
           )}
         </>
       )}
-      <SafeArea position='bottom' />
     </AppFlex>
   );
 });
