@@ -52,6 +52,9 @@ export const AppDatePicker = (props: AppDatePickerProps) => {
         weekStartsOn='Monday'
         selectionMode='single'
         confirmText='Закрыть'
+        popupBodyStyle={{
+          paddingBottom: 'env(safe-area-inset-bottom)'
+        }}
         visible={visible}
         value={value}
         onClose={handleCloseCalendar}

@@ -1,4 +1,5 @@
 import { ConfigProvider, unstableSetRender } from 'antd-mobile'; // Support since version ^5.40.0
+import { type PopupProps } from 'antd-mobile/es/components/popup';
 import ruRU from 'antd-mobile/es/locales/ru-RU';
 import { memo, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -22,10 +23,20 @@ interface AntdProviderProps {
   children: ReactNode;
 }
 
+const customPopupStyle: Partial<PopupProps> = {
+  bodyStyle: {
+    paddingBottom: 'env(safe-area-inset-bottom)'
+  }
+};
+
 // TODO: обновить пакет после выхода antd-mobile@^5.39.1. Сейчас используется временная сборка для поддержки react 19.
 // Подробнее: https://github.com/ant-design/ant-design-mobile/pull/6860
 export const AntdProvider = memo((props: AntdProviderProps) => {
   const { children } = props;
 
-  return <ConfigProvider locale={ruRU}>{children}</ConfigProvider>;
+  return (
+    <ConfigProvider locale={ruRU} popup={customPopupStyle}>
+      {children}
+    </ConfigProvider>
+  );
 });
