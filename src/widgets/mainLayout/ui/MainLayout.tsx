@@ -1,3 +1,4 @@
+import { SafeArea } from 'antd-mobile';
 import { memo, type ReactNode } from 'react';
 import cls from './style.module.scss';
 import { useFirebaseAuth } from '@/app/providers/firebase';
@@ -37,6 +38,7 @@ export const MainLayout = memo((props: MainLayoutProps) => {
           )}
         </>
       )}
+      <SafeArea position='bottom' />
     </AppFlex>
   );
 });
