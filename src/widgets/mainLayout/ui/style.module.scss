@@ -1,5 +1,5 @@
 .app {
-  height: 100vh;
+  height: 100dvh;
 }
 
 .top {
@@ -13,11 +13,13 @@
   padding: var(--app-main-padding);
   align-self: center;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .bottom {
   flex: 0;
   border-top: solid 1px var(--adm-color-border);
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0));
 }
 
 .section {

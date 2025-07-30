@@ -1,4 +1,3 @@
-import { SafeArea } from 'antd-mobile';
 import { memo, type ReactNode } from 'react';
 import cls from './style.module.scss';
 import { useFirebaseAuth } from '@/app/providers/firebase';
@@ -23,7 +22,6 @@ export const MainLayout = memo((props: MainLayoutProps) => {
         <>
           {user && top && (
             <div className={cls.top}>
-              <SafeArea position='top' />
               <div className={cls.section}>{top}</div>
             </div>
           )}
@@ -35,7 +33,6 @@ export const MainLayout = memo((props: MainLayoutProps) => {
           {user && bottom && (
             <div className={cls.bottom}>
               <div className={cls.section}>{bottom}</div>
-              <SafeArea position='bottom' />
             </div>
           )}
         </>
