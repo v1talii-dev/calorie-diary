@@ -14,7 +14,7 @@ export default defineConfig(() => {
         includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
         manifest: {
           name: 'Calorie diary',
-          short_name: 'CD',
+          short_name: 'Calorie diary',
           description: 'Calorie counting',
           theme_color: '#ffffff',
           background_color: '#ffffff',
