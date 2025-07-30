@@ -47,8 +47,8 @@ const openFoodFactsApi = rtkQueryApi.injectEndpoints({
         ...result,
         products: result?.products?.map((el: Product) => ({
           id: el.id,
-          product_name: el.product_name,
-          brands: el.brands,
+          product_name: el.product_name ?? '',
+          brands: el.brands ?? '',
           nutriments: {
             proteins_100g: el.nutriments?.proteins_100g ?? null,
             fat_100g: el.nutriments?.fat_100g ?? null,

@@ -1,8 +1,12 @@
-import { ErrorBlock, List } from 'antd-mobile';
+import { Dialog, ErrorBlock, List, SwipeAction } from 'antd-mobile';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
-import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
+import {
+  type DiaryRecord,
+  useDeleteDiaryEntryMutation,
+  useGetDiaryEntriesQuery
+} from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
@@ -17,6 +21,34 @@ export const DiaryList = (props: DiaryListProps) => {
   const { data, error, isFetching } = useGetDiaryEntriesQuery({
     date: filters.date
   });
+  const [deleteDiaryEntry] = useDeleteDiaryEntryMutation();
+
+  const onClickDeleteAction = (payload: DiaryRecord) => {
+    Dialog.show({
+      content: 'Вы действительно хотите удалить запись в дневнике?',
+      closeOnAction: true,
+      actions: [
+        [
+          { key: 'cancel', text: 'Нет' },
+          {
+            key: 'delete',
+            text: 'Удалить',
+            danger: true,
+            bold: true,
+            onClick: () => onDelete(payload)
+          }
+        ]
+      ]
+    });
+  };
+
+  const onDelete = async (payload: DiaryRecord) => {
+    try {
+      await deleteDiaryEntry(payload.id).unwrap();
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   if (isFetching) {
     return <AppListSkeleton />;
@@ -33,14 +65,25 @@ export const DiaryList = (props: DiaryListProps) => {
   return (
     <List className={cls.diaryList}>
       {data.entries.map(item => (
-        <List.Item
+        <SwipeAction
           key={item.id}
-          description={getCaloriesPerPortion(item.calories, item.weight)}
-          extra={dayjs(item.date).format('HH:mm')}
-          onClick={() => onClickItem(item)}
+          rightActions={[
+            {
+              key: 'delete',
+              text: 'Удалить',
+              color: 'danger',
+              onClick: () => onClickDeleteAction(item)
+            }
+          ]}
         >
-          {getProductName(item.product)}
-        </List.Item>
+          <List.Item
+            description={getCaloriesPerPortion(item.calories, item.weight)}
+            extra={dayjs(item.date).format('HH:mm')}
+            onClick={() => onClickItem(item)}
+          >
+            {getProductName(item.product)}
+          </List.Item>
+        </SwipeAction>
       ))}
     </List>
   );

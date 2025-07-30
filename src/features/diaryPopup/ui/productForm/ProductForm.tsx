@@ -1,4 +1,4 @@
-import { Button, Dialog, Form, Input, Space } from 'antd-mobile';
+import { Button, Form, Input, Space } from 'antd-mobile';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -6,7 +6,6 @@ import { ProductField } from '../productField/ProductField.tsx';
 import {
   type DiaryRecord,
   useAddDiaryEntryMutation,
-  useDeleteDiaryEntryMutation,
   useEditDiaryEntryMutation
 } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
@@ -29,8 +28,6 @@ export const ProductForm = (props: ProductFormProps) => {
     useAddDiaryEntryMutation();
   const [editDiaryEntry, { isLoading: isLoadingEdit }] =
     useEditDiaryEntryMutation();
-  const [deleteDiaryEntry, { isLoading: isLoadingDelete }] =
-    useDeleteDiaryEntryMutation();
 
   const setFormDefaultValues = useCallback(() => {
     const result = value
@@ -76,19 +73,6 @@ export const ProductForm = (props: ProductFormProps) => {
     }
   };
 
-  const onDelete = async () => {
-    try {
-      if (!value?.id) {
-        return;
-      }
-      await deleteDiaryEntry(value.id).unwrap();
-      setFormDefaultValues();
-      onChange();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const onChangeWeight = (weight?: number) => {
     form.setFieldValue('weight', weight ?? '');
   };
@@ -123,39 +107,6 @@ export const ProductForm = (props: ProductFormProps) => {
           >
             Сохранить
           </Button>
-
-          {value?.id && (
-            <Button
-              block
-              color='danger'
-              size='large'
-              disabled={isLoadingDelete}
-              loading={isLoadingDelete}
-              onClick={() => {
-                Dialog.show({
-                  content: 'Вы действительно хотите удалить запись в дневнике?',
-                  closeOnAction: true,
-                  actions: [
-                    [
-                      {
-                        key: 'cancel',
-                        text: 'Нет'
-                      },
-                      {
-                        key: 'delete',
-                        text: 'Удалить',
-                        danger: true,
-                        bold: true,
-                        onClick: () => onDelete()
-                      }
-                    ]
-                  ]
-                });
-              }}
-            >
-              Удалить
-            </Button>
-          )}
         </Space>
       }
       onFinish={onSaveForm}
