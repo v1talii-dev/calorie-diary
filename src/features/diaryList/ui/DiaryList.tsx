@@ -9,6 +9,7 @@ import {
 } from '@/entities/diary';
 import { getFilters } from '@/pages/diary';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
+import SearchIcon from '@/shared/media/icons/search.svg';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface DiaryListProps {
@@ -59,7 +60,9 @@ export const DiaryList = (props: DiaryListProps) => {
   }
 
   if (!data?.entries?.length) {
-    return <ErrorBlock status='empty' title='Дневник пуст' description='' />;
+    return (
+      <ErrorBlock image={SearchIcon} title='Дневник пуст' description='' />
+    );
   }
 
   return (

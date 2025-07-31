@@ -49,7 +49,7 @@ export const DiaryContent = () => {
   };
 
   return (
-    <AppFlex gap={8} fullWidth={true}>
+    <AppFlex gap={16} fullWidth={true}>
       {isFetching ? (
         <FiltersSkeleton />
       ) : (

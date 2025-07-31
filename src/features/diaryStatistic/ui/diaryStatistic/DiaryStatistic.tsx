@@ -28,10 +28,18 @@ export const DiaryStatistic = () => {
   }, [userSettings, diary]);
 
   const remainingCalories = useMemo<number>(() => {
-    if (!diary?.totalCalories || !userSettings?.calories_limit) {
+    if (!userSettings?.calories_limit) {
       return 0;
     }
-    const result = userSettings?.calories_limit - diary?.totalCalories;
+    const result = userSettings?.calories_limit - (diary?.totalCalories ?? 0);
+    return result < 0 ? 0 : result;
+  }, [userSettings, diary]);
+
+  const excessCalories = useMemo<number>(() => {
+    if (!userSettings?.calories_limit) {
+      return 0;
+    }
+    const result = (diary?.totalCalories ?? 0) - userSettings?.calories_limit;
     return result < 0 ? 0 : result;
   }, [userSettings, diary]);
 
@@ -55,12 +63,20 @@ export const DiaryStatistic = () => {
         </div>
       </ProgressCircle>
 
-      {remainingCalories > 0 && (
-        <AppFlex direction='row' align='center' gap={8}>
-          <div className={cls.secondaryText}>Осталось</div>
-          <div>{getCaloriesValue(remainingCalories)}</div>
-        </AppFlex>
-      )}
+      <AppFlex direction='row' align='center' gap={8}>
+        {remainingCalories > 0 && (
+          <>
+            <div className={cls.secondaryText}>Осталось</div>
+            <div>{getCaloriesValue(remainingCalories)}</div>
+          </>
+        )}
+        {excessCalories > 0 && (
+          <>
+            <div className={cls.secondaryText}>Превышение</div>
+            <div>{getCaloriesValue(excessCalories)}</div>
+          </>
+        )}
+      </AppFlex>
     </AppFlex>
   );
 };

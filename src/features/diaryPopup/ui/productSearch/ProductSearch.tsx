@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import cls from './style.module.scss';
 import { type Product, useGetFoodsInfiniteQuery } from '@/entities/product';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
+import SearchIcon from '@/shared/media/icons/search.svg';
 import { AppFlex } from '@/shared/ui/appFlex';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
@@ -63,7 +64,7 @@ export const ProductSearch = (props: ProductFieldProps) => {
       ) : error ? (
         <ErrorBlock status='default' description={JSON.stringify(error)} />
       ) : !filterSearch || !products.length ? (
-        <ErrorBlock status='empty' title='Выполните поиск' description='' />
+        <ErrorBlock image={SearchIcon} title='Выполните поиск' description='' />
       ) : (
         <List key={filterSearch} className={cls.productList}>
           {products.map(product => (
