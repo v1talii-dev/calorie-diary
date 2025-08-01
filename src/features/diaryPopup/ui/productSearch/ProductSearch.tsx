@@ -1,5 +1,11 @@
-import { ErrorBlock, InfiniteScroll, List, SearchBar } from 'antd-mobile';
-import { useMemo, useState } from 'react';
+import {
+  ErrorBlock,
+  InfiniteScroll,
+  List,
+  SearchBar,
+  Toast
+} from 'antd-mobile';
+import { useCallback, useMemo, useState } from 'react';
 import cls from './style.module.scss';
 import { type Product, useGetFoodsInfiniteQuery } from '@/entities/product';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
@@ -39,9 +45,18 @@ export const ProductSearch = (props: ProductFieldProps) => {
     );
   }, [data]);
 
-  const onClickProduct = (product: Product) => {
-    onChange?.(product);
-  };
+  const onClickProduct = useCallback(
+    (product: Product) => {
+      if (!product.nutriments['energy-kcal_100g']) {
+        return Toast.show({
+          content: 'Нет калорий',
+          position: 'bottom'
+        });
+      }
+      onChange?.(product);
+    },
+    [onChange]
+  );
 
   const onLoadMore = async () => {
     if (isFetchingNextPage) {
