@@ -1,10 +1,4 @@
-import {
-  ErrorBlock,
-  InfiniteScroll,
-  List,
-  SearchBar,
-  Toast
-} from 'antd-mobile';
+import { ErrorBlock, InfiniteScroll, List, SearchBar } from 'antd-mobile';
 import { useCallback, useMemo, useState } from 'react';
 import cls from './style.module.scss';
 import { type Product, useGetFoodsInfiniteQuery } from '@/entities/product';
@@ -47,12 +41,6 @@ export const ProductSearch = (props: ProductFieldProps) => {
 
   const onClickProduct = useCallback(
     (product: Product) => {
-      if (!product.nutriments['energy-kcal_100g']) {
-        return Toast.show({
-          content: 'Нет калорий',
-          position: 'bottom'
-        });
-      }
       onChange?.(product);
     },
     [onChange]
@@ -86,7 +74,7 @@ export const ProductSearch = (props: ProductFieldProps) => {
             <List.Item
               key={product.id}
               description={getCaloriesPerPortion(
-                product.nutriments?.['energy-kcal_100g'] || 0
+                product.nutriments?.['energy-kcal_100g']
               )}
               onClick={() => onClickProduct(product)}
             >

@@ -134,7 +134,7 @@ export const ProductForm = (props: ProductFormProps) => {
             Number(weight),
             product?.nutriments?.['energy-kcal_100g']
           );
-          form.setFieldValue('calories', result > 0 ? result : '-');
+          form.setFieldValue('calories', result > 0 ? result : 0);
           return (
             <Form.Item label='Всего калорий'>
               <Input

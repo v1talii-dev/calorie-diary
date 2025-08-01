@@ -34,7 +34,7 @@ export const ProductField = (props: ProductFieldProps) => {
       <List className={cls.formField}>
         <List.Item
           description={getCaloriesPerPortion(
-            value?.nutriments?.['energy-kcal_100g'] || 0
+            value?.nutriments?.['energy-kcal_100g']
           )}
           onClick={() => {
             setVisiblePopup(true);
