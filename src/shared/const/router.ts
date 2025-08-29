@@ -4,12 +4,17 @@ export type Route = {
   isPrivate: boolean;
 };
 
-type RouteKeys = 'DIARY' | 'PROFILE' | 'LOGIN' | 'NOT_FOUND';
+type RouteKeys = 'DIARY' | 'STATISTIC' | 'PROFILE' | 'LOGIN' | 'NOT_FOUND';
 
 export const ROUTE: Record<RouteKeys, Route> = {
   DIARY: {
     path: () => `/`,
     name: 'Дневник',
+    isPrivate: true
+  },
+  STATISTIC: {
+    path: () => `/statistic`,
+    name: 'Статистика',
     isPrivate: true
   },
   PROFILE: {

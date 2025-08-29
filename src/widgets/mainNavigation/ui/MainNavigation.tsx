@@ -11,6 +11,11 @@ const items = [
     icon: <FileOutline />
   },
   {
+    key: ROUTE.STATISTIC.path(),
+    title: ROUTE.STATISTIC.name,
+    icon: <FileOutline />
+  },
+  {
     key: ROUTE.PROFILE.path(),
     title: ROUTE.PROFILE.name,
     icon: <UserOutline />
