@@ -1,9 +1,11 @@
+import { ErrorBlock } from 'antd-mobile';
 import dayjs from 'dayjs';
 import ReactECharts from 'echarts-for-react';
 import { memo, useMemo } from 'react';
 import { StatisticSkeleton } from '../statisticSkeleton/StatisticSkeleton.tsx';
 import { useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
+import SearchIcon from '@/shared/media/icons/search.svg';
 
 const date = dayjs();
 
@@ -20,13 +22,15 @@ export const StatisticContent = memo(() => {
         text: 'Потребление калорий за неделю'
       },
       tooltip: {
+        confine: true,
         trigger: 'axis'
       },
       xAxis: {
         type: 'category',
-        data: diary?.totalByDay.days.map((date: string) =>
-          dayjs(date).format('dd')
-        )
+        data: diary?.totalByDay.map(item => item.date),
+        axisLabel: {
+          formatter: (value: string) => dayjs(value).format('dd')
+        }
       },
       yAxis: {
         type: 'value'
@@ -35,7 +39,7 @@ export const StatisticContent = memo(() => {
         {
           name: 'Фактическое потребление',
           type: 'bar',
-          data: diary?.totalByDay.calories,
+          data: diary?.totalByDay.map(item => item.calories),
           itemStyle: {
             color: '#00b578'
           }
@@ -43,7 +47,7 @@ export const StatisticContent = memo(() => {
         {
           name: 'Лимит',
           type: 'line',
-          data: Array(diary?.totalByDay.days.length).fill(
+          data: Array(diary?.totalByDay.length).fill(
             userSettings?.calories_limit
           ),
           symbol: 'none',
@@ -58,7 +62,13 @@ export const StatisticContent = memo(() => {
   }, [diary, userSettings]);
 
   if (isFetching) {
-    return <StatisticSkeleton bars={diary?.totalByDay.days.length} />;
+    return <StatisticSkeleton bars={diary?.totalByDay.length} />;
+  }
+
+  if (!diary?.entries?.length) {
+    return (
+      <ErrorBlock image={SearchIcon} title='Дневник пуст' description='' />
+    );
   }
 
   return <ReactECharts option={option} style={{ height: 400 }} />;

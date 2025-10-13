@@ -16,6 +16,7 @@ import { type DiaryEntry, type DiaryRecord } from '../../types';
 // TODO: не реактивный auth, при смене юзера, RTK не обновляет данные
 import { auth, db } from '@/shared/api/firebase.ts';
 import { rtkQueryApi } from '@/shared/api/rtkQuery';
+import { getDateRangeArray } from '@/shared/lib/dayjs.ts';
 
 const getDiaryValues = (payload: Partial<DiaryRecord>) => ({
   uid: auth.currentUser?.uid,
@@ -33,7 +34,7 @@ const diaryApi = rtkQueryApi
         {
           entries: DiaryRecord[];
           totalCalories: number;
-          totalByDay: { days: string[]; calories: number[] };
+          totalByDay: { date: string; calories: number }[];
         },
         { dateStart: string; dateEnd: string }
       >({
@@ -72,23 +73,29 @@ const diaryApi = rtkQueryApi
               return result + (data.calories || 0);
             }, 0);
 
-            const totalByDay = snapshot.docs.reduce((result, doc) => {
+            const dates = getDateRangeArray(dateStart, dateEnd);
+            const totalByDay = new Map(
+              Object.entries(dates).map(([_, v]) => [v, 0])
+            );
+            snapshot.docs.forEach(doc => {
               const data = doc.data() as DiaryEntry;
               const date = data.date.toDate().toISOString().split('T')[0];
-              if (!result.has(date)) {
-                result.set(date, 0);
+              if (!totalByDay.has(date)) {
+                totalByDay.set(date, 0);
               }
-              result.set(date, result.get(date) + (data.calories || 0));
-              return result;
-            }, new Map());
+              totalByDay.set(
+                date,
+                (totalByDay.get(date) ?? 0) + (data.calories ?? 0)
+              );
+            });
+
             return {
               data: {
                 entries: result,
                 totalCalories,
-                totalByDay: {
-                  days: Array.from(totalByDay.keys()).reverse(),
-                  calories: Array.from(totalByDay.values()).reverse()
-                }
+                totalByDay: Array.from(totalByDay.entries()).map(
+                  ([key, value]) => ({ date: key, calories: value })
+                )
               }
             };
           } catch (error) {
