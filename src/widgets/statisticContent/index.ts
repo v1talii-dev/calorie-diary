@@ -1,1 +1,1 @@
-export { StatisticContent } from './ui/StatisticContent.tsx';
+export { StatisticContent } from './ui/statisticContent/StatisticContent.tsx';

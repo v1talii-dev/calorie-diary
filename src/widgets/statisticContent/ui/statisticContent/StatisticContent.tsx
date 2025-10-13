@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import ReactECharts from 'echarts-for-react';
 import { memo, useMemo } from 'react';
+import { StatisticSkeleton } from '../statisticSkeleton/StatisticSkeleton.tsx';
 import { useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
 
@@ -57,7 +58,7 @@ export const StatisticContent = memo(() => {
   }, [diary, userSettings]);
 
   if (isFetching) {
-    return <>loading...</>;
+    return <StatisticSkeleton bars={diary?.totalByDay.days.length} />;
   }
 
   return <ReactECharts option={option} style={{ height: 400 }} />;
