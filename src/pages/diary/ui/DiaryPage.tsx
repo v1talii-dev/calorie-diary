@@ -10,7 +10,8 @@ import { DiaryContent } from '@/widgets/diaryContent';
 export const DiaryPage = memo(() => {
   const filters = useSelector(getFilters);
   const { refetch: refetchDiaryEntries } = useGetDiaryEntriesQuery({
-    date: filters.date
+    dateStart: filters.date,
+    dateEnd: filters.date
   });
 
   return (

@@ -15,7 +15,10 @@ export const DiaryContent = () => {
   const [isOpenDiaryPopup, setIsOpenDiaryPopup] = useState(false);
   const [currentDiary, setCurrentDiary] = useState<DiaryRecord>();
   const filters = useSelector(getFilters);
-  const { isFetching } = useGetDiaryEntriesQuery({ date: filters.date });
+  const { isFetching } = useGetDiaryEntriesQuery({
+    dateStart: filters.date,
+    dateEnd: filters.date
+  });
 
   const formFilters = useMemo(() => {
     return {

@@ -1,31 +1,64 @@
+import dayjs from 'dayjs';
 import ReactECharts from 'echarts-for-react';
 import { memo, useMemo } from 'react';
+import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { useGetUserSettingsEntryQuery } from '@/entities/user';
 
-// TODO
+const date = dayjs();
+
 export const StatisticContent = memo(() => {
+  const { data: diary, isFetching } = useGetDiaryEntriesQuery({
+    dateStart: date.subtract(7, 'day').toISOString(),
+    dateEnd: date.toISOString()
+  });
+  const { data: userSettings } = useGetUserSettingsEntryQuery();
+
   const option = useMemo(() => {
     return {
+      title: {
+        text: 'Потребление калорий за неделю'
+      },
       tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
+        trigger: 'axis'
       },
       xAxis: {
         type: 'category',
-        data: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+        data: diary?.totalByDay.days.map((date: string) =>
+          dayjs(date).format('dd')
+        )
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar'
+          name: 'Фактическое потребление',
+          type: 'bar',
+          data: diary?.totalByDay.calories,
+          itemStyle: {
+            color: '#00b578'
+          }
+        },
+        {
+          name: 'Лимит',
+          type: 'line',
+          data: Array(diary?.totalByDay.days.length).fill(
+            userSettings?.calories_limit
+          ),
+          symbol: 'none',
+          lineStyle: {
+            color: '#ff3141',
+            width: 2,
+            type: 'dashed'
+          }
         }
       ]
     };
-  }, []);
+  }, [diary, userSettings]);
+
+  if (isFetching) {
+    return <>loading...</>;
+  }
 
   return <ReactECharts option={option} style={{ height: 400 }} />;
 });

@@ -30,13 +30,22 @@ const diaryApi = rtkQueryApi
   .injectEndpoints({
     endpoints: build => ({
       getDiaryEntries: build.query<
-        { entries: DiaryRecord[]; totalCalories: number },
-        { date: string }
+        {
+          entries: DiaryRecord[];
+          totalCalories: number;
+          totalByDay: { days: string[]; calories: number[] };
+        },
+        { dateStart: string; dateEnd: string }
       >({
-        async queryFn({ date }, _queryApi, _extraOptions, _fetchWithBQ) {
+        async queryFn(
+          { dateStart, dateEnd },
+          _queryApi,
+          _extraOptions,
+          _fetchWithBQ
+        ) {
           try {
-            const startOfDay = dayjs(date).startOf('day').toDate();
-            const endOfDay = dayjs(date).endOf('day').toDate();
+            const startOfDay = dayjs(dateStart).startOf('day').toDate();
+            const endOfDay = dayjs(dateEnd).endOf('day').toDate();
             const startTimestamp = Timestamp.fromDate(startOfDay);
             const endTimestamp = Timestamp.fromDate(endOfDay);
 
@@ -58,12 +67,30 @@ const diaryApi = rtkQueryApi
               };
             });
 
-            const totalCalories = snapshot.docs.reduce((sum, doc) => {
+            const totalCalories = snapshot.docs.reduce((result, doc) => {
               const data = doc.data() as DiaryEntry;
-              return sum + (data.calories || 0);
+              return result + (data.calories || 0);
             }, 0);
 
-            return { data: { entries: result, totalCalories } };
+            const totalByDay = snapshot.docs.reduce((result, doc) => {
+              const data = doc.data() as DiaryEntry;
+              const date = data.date.toDate().toISOString().split('T')[0];
+              if (!result.has(date)) {
+                result.set(date, 0);
+              }
+              result.set(date, result.get(date) + (data.calories || 0));
+              return result;
+            }, new Map());
+            return {
+              data: {
+                entries: result,
+                totalCalories,
+                totalByDay: {
+                  days: Array.from(totalByDay.keys()).reverse(),
+                  calories: Array.from(totalByDay.values()).reverse()
+                }
+              }
+            };
           } catch (error) {
             console.error(error);
             return {

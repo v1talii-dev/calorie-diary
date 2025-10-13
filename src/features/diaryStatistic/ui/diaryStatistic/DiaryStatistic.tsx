@@ -14,7 +14,8 @@ export const DiaryStatistic = () => {
   const { data: userSettings, isFetching: isFetchingUserSettings } =
     useGetUserSettingsEntryQuery();
   const { data: diary, isFetching: isFetchingDiary } = useGetDiaryEntriesQuery({
-    date: filters.date
+    dateStart: filters.date,
+    dateEnd: filters.date
   });
 
   const percentageConsumption = useMemo<number>(() => {
