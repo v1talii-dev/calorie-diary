@@ -3,10 +3,15 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiltersSkeleton } from '../filtersSkeleton/FiltersSkeleton.tsx';
 import cls from './style.module.scss';
-import { type DiaryRecord, useGetDiaryEntriesQuery } from '@/entities/diary';
+import {
+  type DiaryRecord,
+  type DiaryFilters,
+  useGetDiaryEntriesQuery,
+  getFilters,
+  setFilters
+} from '@/entities/diary';
 import { DiaryList } from '@/features/diaryList';
 import { DiaryPopup } from '@/features/diaryPopup';
-import { type DiaryFilters, getFilters, setFilters } from '@/pages/diary';
 import { AppDatePicker } from '@/shared/ui/appDatePicker/AppDatePicker.tsx';
 import { AppFlex } from '@/shared/ui/appFlex';
 

@@ -5,9 +5,9 @@ import cls from './style.module.scss';
 import {
   type DiaryRecord,
   useDeleteDiaryEntryMutation,
-  useGetDiaryEntriesQuery
+  useGetDiaryEntriesQuery,
+  getFilters
 } from '@/entities/diary';
-import { getFilters } from '@/pages/diary';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import SearchIcon from '@/shared/media/icons/search.svg';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';

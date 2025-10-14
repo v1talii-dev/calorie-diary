@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { diaryReducer } from '@/pages/diary';
+import { diaryReducer } from '@/entities/diary';
 import { rtkQueryApi } from '@/shared/api/rtkQuery.ts';
 
 export const store = configureStore({

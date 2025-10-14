@@ -1,9 +1,8 @@
 import { PullToRefresh } from 'antd-mobile';
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { useGetDiaryEntriesQuery, getFilters } from '@/entities/diary';
 import { DiaryStatistic } from '@/features/diaryStatistic';
-import { getFilters } from '@/pages/diary';
 import { AppFlex } from '@/shared/ui/appFlex';
 import { DiaryContent } from '@/widgets/diaryContent';
 

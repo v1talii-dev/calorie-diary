@@ -2,10 +2,9 @@ import { ProgressCircle } from 'antd-mobile';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import cls from './style.module.scss';
-import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { useGetDiaryEntriesQuery, getFilters } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
 import { StatisticSkeleton } from '@/features/diaryStatistic/ui/statisticSkeleton/StatisticSkeleton.tsx';
-import { getFilters } from '@/pages/diary';
 import { getCaloriesValue } from '@/shared/lib/catalog.ts';
 import { AppFlex } from '@/shared/ui/appFlex';
 

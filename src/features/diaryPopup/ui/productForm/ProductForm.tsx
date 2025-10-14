@@ -6,9 +6,9 @@ import { ProductField } from '../productField/ProductField.tsx';
 import {
   type DiaryRecord,
   useAddDiaryEntryMutation,
-  useEditDiaryEntryMutation
+  useEditDiaryEntryMutation,
+  getFilters
 } from '@/entities/diary';
-import { getFilters } from '@/pages/diary';
 import { getCalculatedCalories } from '@/shared/lib/catalog.ts';
 
 interface ProductFormProps {

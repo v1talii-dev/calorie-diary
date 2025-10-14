@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { DiaryFilters } from '../../types';
+import type { DiaryFilters } from '../types';
 
 export interface DiaryState {
   filters: DiaryFilters;
