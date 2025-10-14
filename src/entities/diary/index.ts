@@ -7,5 +7,6 @@ export {
   useGetRecentDiaryEntriesQuery,
   useAddDiaryEntryMutation,
   useEditDiaryEntryMutation,
-  useDeleteDiaryEntryMutation
+  useDeleteDiaryEntryMutation,
+  util
 } from './model/service/firebaseDiaryService.ts';

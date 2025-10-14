@@ -197,5 +197,6 @@ export const {
   useGetRecentDiaryEntriesQuery,
   useAddDiaryEntryMutation,
   useEditDiaryEntryMutation,
-  useDeleteDiaryEntryMutation
+  useDeleteDiaryEntryMutation,
+  util
 } = diaryApi;
