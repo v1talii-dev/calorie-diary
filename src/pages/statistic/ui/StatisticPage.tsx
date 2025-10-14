@@ -1,6 +1,6 @@
 import { PullToRefresh } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { memo, useEffect } from 'react';
+import { memo, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '@/app';
 import {
@@ -18,7 +18,7 @@ export const StatisticPage = memo(() => {
     dateEnd: filters.dateEnd
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const result = {
       dateStart: dayjs().subtract(7, 'day').toISOString(),
       dateEnd: dayjs().toISOString()

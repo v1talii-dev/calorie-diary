@@ -1,12 +1,12 @@
 import { PullToRefresh } from 'antd-mobile';
 import dayjs from 'dayjs';
-import { memo, useEffect } from 'react';
+import { memo, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch } from '@/app';
 import {
-  useGetDiaryEntriesQuery,
   getFilters,
-  setFilters
+  setFilters,
+  useGetDiaryEntriesQuery
 } from '@/entities/diary';
 import { DiaryStatistic } from '@/features/diaryStatistic';
 import { AppFlex } from '@/shared/ui/appFlex';
@@ -20,7 +20,7 @@ export const DiaryPage = memo(() => {
     dateEnd: filters.dateEnd
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const result = {
       dateStart: dayjs().toISOString(),
       dateEnd: dayjs().toISOString()
