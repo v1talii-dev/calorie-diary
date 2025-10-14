@@ -1,68 +1,70 @@
 import { ErrorBlock } from 'antd-mobile';
 import dayjs from 'dayjs';
 import ReactECharts from 'echarts-for-react';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { StatisticSkeleton } from '../statisticSkeleton/StatisticSkeleton.tsx';
 import { useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
 import SearchIcon from '@/shared/media/icons/search.svg';
 
-const date = dayjs();
-
 export const StatisticContent = memo(() => {
+  const [date] = useState(dayjs());
   const { data: diary, isFetching } = useGetDiaryEntriesQuery({
     dateStart: date.subtract(7, 'day').toISOString(),
     dateEnd: date.toISOString()
   });
   const { data: userSettings } = useGetUserSettingsEntryQuery();
 
-  const option = useMemo(() => {
-    return {
-      title: {
-        text: 'Потребление калорий за неделю'
-      },
+  const option = useMemo(
+    () => ({
       tooltip: {
+        trigger: 'axis',
         confine: true,
-        trigger: 'axis'
+        enterable: true,
+        position: (point: number[]) => [point[0], 0],
+        borderWidth: 0,
+        textStyle: { color: '#333', fontSize: 14 },
+        //@ts-ignore
+        formatter: params => {
+          const item = params?.[0];
+          if (!item) return '';
+          return `
+          <div style="font-size:13px;">
+            <span style="font-size:24px;">${item.value}</span> <span style="opacity:0.6;">ккал</span><br/>
+            <span style="opacity:0.6;">${dayjs(item.name).format('DD.MM.YYYY')}</span>
+          </div>
+        `;
+        }
       },
       xAxis: {
         type: 'category',
-        data: diary?.totalByDay.map(item => item.date),
+        data: diary?.totalByDay.map(i => i.date) ?? [],
         axisLabel: {
           formatter: (value: string) => dayjs(value).format('dd')
         }
       },
-      yAxis: {
-        type: 'value'
-      },
+      yAxis: { type: 'value' },
       series: [
         {
-          name: 'Фактическое потребление',
+          name: 'Потребление',
           type: 'bar',
-          data: diary?.totalByDay.map(item => item.calories),
-          itemStyle: {
-            color: '#00b578'
-          }
+          data: diary?.totalByDay.map(i => i.calories) ?? [],
+          itemStyle: { color: '#00b578' }
         },
         {
           name: 'Лимит',
           type: 'line',
-          data: Array(diary?.totalByDay.length).fill(
-            userSettings?.calories_limit
-          ),
+          data: diary?.totalByDay.map(() => userSettings?.calories_limit) ?? [],
           symbol: 'none',
-          lineStyle: {
-            color: '#ff3141',
-            width: 2,
-            type: 'dashed'
-          }
+          lineStyle: { color: '#ff3141', width: 2, type: 'dashed' }
         }
       ]
-    };
-  }, [diary, userSettings]);
+    }),
+    [diary, userSettings]
+  );
 
   if (isFetching) {
-    return <StatisticSkeleton bars={diary?.totalByDay.length} />;
+    return <StatisticSkeleton />;
   }
 
   if (!diary?.entries?.length) {
@@ -71,5 +73,5 @@ export const StatisticContent = memo(() => {
     );
   }
 
-  return <ReactECharts option={option} style={{ height: 400 }} />;
+  return <ReactECharts option={option} style={{ height: 360 }} />;
 });

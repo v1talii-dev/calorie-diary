@@ -1,5 +1,5 @@
 import { TabBar } from 'antd-mobile';
-import { FileOutline, UserOutline } from 'antd-mobile-icons';
+import { FileOutline, HistogramOutline, UserOutline } from 'antd-mobile-icons';
 import { memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/shared/const/router.ts';
@@ -13,7 +13,7 @@ const items = [
   {
     key: ROUTE.STATISTIC.path(),
     title: ROUTE.STATISTIC.name,
-    icon: <FileOutline />
+    icon: <HistogramOutline />
   },
   {
     key: ROUTE.PROFILE.path(),

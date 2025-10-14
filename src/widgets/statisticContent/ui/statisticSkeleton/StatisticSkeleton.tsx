@@ -1,21 +1,16 @@
 import { Skeleton } from 'antd-mobile';
+import classNames from 'classnames';
 import cls from './style.module.scss';
 import { AppFlex } from '@/shared/ui/appFlex';
 
-type StatisticSkeletonProps = {
-  bars?: number;
-};
-
-export const StatisticSkeleton = (props: StatisticSkeletonProps) => {
-  const { bars = 7 } = props;
+export const StatisticSkeleton = () => {
   return (
-    <AppFlex align='center'>
-      <Skeleton animated className={cls.text} />
-      <AppFlex direction='row' align='center' justify='flex-start'>
-        {Array.from({ length: bars }).map((_, index) => (
-          <Skeleton key={index} animated className={cls.bar} />
-        ))}
-      </AppFlex>
+    <AppFlex direction='row' align='flex-end' justify='flex-start'>
+      <Skeleton animated className={classNames([cls.bar, cls.barOne])} />
+      <Skeleton animated className={classNames([cls.bar, cls.barTwo])} />
+      <Skeleton animated className={classNames([cls.bar, cls.barThree])} />
+      <Skeleton animated className={classNames([cls.bar, cls.barTwo])} />
+      <Skeleton animated className={classNames([cls.bar, cls.barThree])} />
     </AppFlex>
   );
 };
