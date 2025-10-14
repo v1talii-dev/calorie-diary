@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FiltersSkeleton } from '../filtersSkeleton/FiltersSkeleton.tsx';
 import cls from './style.module.scss';
+import type { AppDispatch } from '@/app';
 import {
   type DiaryRecord,
   type DiaryFilters,
@@ -16,19 +17,19 @@ import { AppDatePicker } from '@/shared/ui/appDatePicker/AppDatePicker.tsx';
 import { AppFlex } from '@/shared/ui/appFlex';
 
 export const DiaryContent = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [isOpenDiaryPopup, setIsOpenDiaryPopup] = useState(false);
   const [currentDiary, setCurrentDiary] = useState<DiaryRecord>();
   const filters = useSelector(getFilters);
   const { isFetching } = useGetDiaryEntriesQuery({
-    dateStart: filters.date,
-    dateEnd: filters.date
+    dateStart: filters.dateStart,
+    dateEnd: filters.dateEnd
   });
 
   const formFilters = useMemo(() => {
     return {
       ...filters,
-      date: new Date(filters.date)
+      date: new Date(filters.dateStart)
     };
   }, [filters]);
 
@@ -50,8 +51,8 @@ export const DiaryContent = () => {
     filters: { date: Date } & Omit<DiaryFilters, 'date'>
   ) => {
     const result = {
-      ...filters,
-      date: filters.date.toISOString()
+      dateStart: filters.date.toISOString(),
+      dateEnd: filters.date.toISOString()
     };
     dispatch(setFilters(result));
   };

@@ -1,17 +1,18 @@
 import { ErrorBlock } from 'antd-mobile';
 import dayjs from 'dayjs';
 import ReactECharts from 'echarts-for-react';
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { StatisticSkeleton } from '../statisticSkeleton/StatisticSkeleton.tsx';
-import { useGetDiaryEntriesQuery } from '@/entities/diary';
+import { getFilters, useGetDiaryEntriesQuery } from '@/entities/diary';
 import { useGetUserSettingsEntryQuery } from '@/entities/user';
 import SearchIcon from '@/shared/media/icons/search.svg';
 
 export const StatisticContent = memo(() => {
-  const [date] = useState(dayjs());
+  const filters = useSelector(getFilters);
   const { data: diary, isFetching } = useGetDiaryEntriesQuery({
-    dateStart: date.subtract(7, 'day').toISOString(),
-    dateEnd: date.toISOString()
+    dateStart: filters.dateStart,
+    dateEnd: filters.dateEnd
   });
   const { data: userSettings } = useGetUserSettingsEntryQuery();
 

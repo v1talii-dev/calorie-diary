@@ -20,8 +20,8 @@ export const DiaryList = (props: DiaryListProps) => {
   const { onClickItem } = props;
   const filters = useSelector(getFilters);
   const { data, error, isFetching } = useGetDiaryEntriesQuery({
-    dateStart: filters.date,
-    dateEnd: filters.date
+    dateStart: filters.dateStart,
+    dateEnd: filters.dateEnd
   });
   const [deleteDiaryEntry] = useDeleteDiaryEntryMutation();
 

@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
 import type { DiaryFilters } from '../types';
 
 export interface DiaryState {
@@ -8,7 +9,8 @@ export interface DiaryState {
 
 const initialState: DiaryState = {
   filters: {
-    date: new Date().toISOString()
+    dateStart: dayjs().toISOString(),
+    dateEnd: dayjs().toISOString()
   }
 };
 

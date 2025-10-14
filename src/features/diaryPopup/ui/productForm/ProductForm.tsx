@@ -41,7 +41,7 @@ export const ProductForm = (props: ProductFormProps) => {
           product: undefined,
           weight: '',
           calories: undefined,
-          date: dayjs(filters.date).startOf('day').toDate()
+          date: dayjs(filters.dateStart).startOf('day').toDate()
         };
     form.setFieldsValue(result);
   }, [value, form, filters]);

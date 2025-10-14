@@ -1,3 +1,4 @@
 export interface DiaryFilters {
-  date: string;
+  dateStart: string;
+  dateEnd: string;
 }
