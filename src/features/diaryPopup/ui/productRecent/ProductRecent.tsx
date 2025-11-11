@@ -4,12 +4,12 @@ import {
   type DiaryRecord,
   useGetRecentDiaryEntriesQuery
 } from '@/entities/diary';
-import { type Product } from '@/entities/product';
+import { type ProductEntry } from '@/entities/product';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 import { AppListSkeleton } from '@/shared/ui/appSkeleton';
 
 interface ProductRecentProps {
-  onChange?: (product: Product, weight?: number) => void;
+  onChange?: (product?: ProductEntry, weight?: number) => void;
 }
 export const ProductRecent = (props: ProductRecentProps) => {
   const { onChange } = props;

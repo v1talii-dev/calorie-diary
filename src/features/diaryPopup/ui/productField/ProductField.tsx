@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { ProductRecent } from '../productRecent/ProductRecent.tsx';
 import { ProductSearch } from '../productSearch/ProductSearch.tsx';
 import cls from './style.module.scss';
-import { type Product } from '@/entities/product';
+import { type ProductEntry } from '@/entities/product';
 import { getCaloriesPerPortion, getProductName } from '@/shared/lib/catalog.ts';
 
 interface ProductFieldProps {
-  value?: Product;
+  value?: ProductEntry;
   openOnInit?: boolean;
-  onChange?: (product: Product) => void;
+  onChange?: (product?: ProductEntry) => void;
   onChangeWeight?: (weight?: number) => void;
 }
 
@@ -17,7 +17,7 @@ export const ProductField = (props: ProductFieldProps) => {
   const { value, openOnInit, onChange, onChangeWeight } = props;
   const [visiblePopup, setVisiblePopup] = useState(false);
 
-  const onChangeProduct = (product: Product, weight?: number) => {
+  const onChangeProduct = (product?: ProductEntry, weight?: number) => {
     onChange?.(product);
     onChangeWeight?.(weight);
     setVisiblePopup(false);
@@ -33,9 +33,7 @@ export const ProductField = (props: ProductFieldProps) => {
     <>
       <List className={cls.formField}>
         <List.Item
-          description={getCaloriesPerPortion(
-            value?.nutriments?.['energy-kcal_100g']
-          )}
+          description={getCaloriesPerPortion(value?.nutrients?.energy)}
           onClick={() => {
             setVisiblePopup(true);
           }}

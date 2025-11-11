@@ -1,3 +1,4 @@
+import { QueryDocumentSnapshot } from '@firebase/firestore';
 import dayjs from 'dayjs';
 import {
   addDoc,
@@ -5,6 +6,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  getDoc,
   limit,
   orderBy,
   query,
@@ -20,11 +22,30 @@ import { getDateRangeArray } from '@/shared/lib/dayjs.ts';
 
 const getDiaryValues = (payload: Partial<DiaryRecord>) => ({
   uid: auth.currentUser?.uid,
-  product: payload.product,
   weight: payload.weight,
   calories: payload.calories,
-  date: payload.date ? Timestamp.fromDate(new Date(payload.date)) : undefined
+  date: payload.date ? Timestamp.fromDate(new Date(payload.date)) : undefined,
+  product: payload.product?.id
+    ? doc(db, 'product', payload.product.id)
+    : undefined
 });
+
+const getDiaryEntries = async (
+  items: Array<QueryDocumentSnapshot>
+): Promise<DiaryRecord[]> => {
+  const result = [];
+  for (const doc of items) {
+    const entry = doc.data() as Omit<DiaryEntry, 'id'>;
+    const product = await getDoc(entry.product);
+    result.push({
+      ...entry,
+      id: doc.id,
+      date: entry.date.toDate().toISOString(),
+      product: product ? { ...product.data(), id: product.id } : undefined
+    });
+  }
+  return result;
+};
 
 const diaryApi = rtkQueryApi
   .enhanceEndpoints({ addTagTypes: ['diary'] })
@@ -58,15 +79,7 @@ const diaryApi = rtkQueryApi
               orderBy('date', 'desc')
             );
             const snapshot = await getDocs(q);
-
-            const result = snapshot.docs.map(doc => {
-              const data = doc.data() as Omit<DiaryEntry, 'id'>;
-              return {
-                ...data,
-                id: doc.id,
-                date: data.date.toDate().toISOString()
-              };
-            });
+            const entries = await getDiaryEntries(snapshot.docs);
 
             const totalCalories = snapshot.docs.reduce((result, doc) => {
               const data = doc.data() as DiaryEntry;
@@ -91,7 +104,7 @@ const diaryApi = rtkQueryApi
 
             return {
               data: {
-                entries: result,
+                entries,
                 totalCalories,
                 totalByDay: Array.from(totalByDay.entries()).map(
                   ([key, value]) => ({ date: key, calories: value })
@@ -121,17 +134,9 @@ const diaryApi = rtkQueryApi
               limit(100)
             );
             const snapshot = await getDocs(q);
+            const entries = await getDiaryEntries(snapshot.docs);
 
-            const result = snapshot.docs.map(doc => {
-              const data = doc.data() as Omit<DiaryEntry, 'id'>;
-              return {
-                ...data,
-                id: doc.id,
-                date: data.date.toDate().toISOString()
-              };
-            });
-
-            return { data: { entries: result } };
+            return { data: { entries } };
           } catch (error) {
             console.error(error);
             return {
@@ -164,6 +169,7 @@ const diaryApi = rtkQueryApi
             if (!values.id) {
               return Promise.reject();
             }
+            console.log({ values });
             await updateDoc(
               doc(db, 'diary', values.id),
               getDiaryValues(values)

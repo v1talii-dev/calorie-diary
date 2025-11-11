@@ -1,2 +1,2 @@
-export { useGetFoodsInfiniteQuery } from './model/service/openFoodFactsService.ts';
-export { type Product } from './types';
+export { useGetProductsInfiniteQuery } from './model/service/firebaseProductService.ts';
+export { type ProductEntry } from './types';

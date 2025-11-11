@@ -1,4 +1,4 @@
-import type { Product } from '@/entities/product';
+import type { ProductEntry } from '@/entities/product';
 
 export const getCaloriesValue = (value?: number | null) =>
   value ? `${value} ккал` : '';
@@ -25,13 +25,11 @@ export const getCaloriesPerPortion = (
   return `${getCaloriesValue(Math.floor(calories))} / ${getWeightValue(portion)}`;
 };
 
-export const getProductName = (product: Product) => {
+export const getProductName = (product?: ProductEntry) => {
   const result: string[] = [];
-  if (product?.brands) {
-    result.push(product.brands);
+  if (product?.name) {
+    result.push(product.name);
   }
-  if (product?.product_name) {
-    result.push(product.product_name);
-  }
-  return result.join(' / ').replace(/&quot;/g, '"');
+  // TODO product brand
+  return result.join(' / ');
 };

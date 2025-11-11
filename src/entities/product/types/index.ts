@@ -1,19 +1,18 @@
-export interface Product {
+export interface ProductEntry {
   id: string;
-  product_name?: string;
-  brands?: string;
-  nutriments: {
-    proteins_100g: number | null;
-    fat_100g: number | null;
-    carbohydrates_100g: number | null;
-    'energy-kcal_100g': number | null;
+  name?: string;
+  nutrients?: {
+    proteins: number;
+    fat: number;
+    carbohydrates: number;
+    energy: number;
   };
 }
 
 export interface ProductList {
   count: number;
   page: number;
-  page_count: number;
-  page_size: number;
-  products: Product[];
+  pageCount: number;
+  pageSize: number;
+  content: ProductEntry[];
 }

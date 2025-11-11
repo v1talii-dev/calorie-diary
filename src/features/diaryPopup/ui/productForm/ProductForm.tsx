@@ -132,7 +132,7 @@ export const ProductForm = (props: ProductFormProps) => {
         {({ weight, product }, form) => {
           const result = getCalculatedCalories(
             Number(weight),
-            product?.nutriments?.['energy-kcal_100g']
+            product?.nutrients?.energy
           );
           form.setFieldValue('calories', result > 0 ? result : 0);
           return (
