@@ -31,3 +31,9 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Деплой на Github pages
+
+```sh
+npm run deploy
+```
