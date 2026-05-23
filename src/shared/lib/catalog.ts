@@ -1,4 +1,4 @@
-import type { ProductEntry } from '@/entities/product';
+import type { ProductEntry } from '@/shared/types/product';
 
 export const getCaloriesValue = (value?: number | null) =>
   value ? `${value} ккал` : '';

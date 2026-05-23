@@ -1,5 +1,5 @@
 import { type DocumentReference, type Timestamp } from 'firebase/firestore';
-import type { ProductEntry } from '@/entities/product';
+import type { ProductEntry } from '@/shared/types/product';
 
 export type DiaryEntry = {
   id: string;

@@ -1,13 +1,6 @@
-export interface ProductEntry {
-  id: string;
-  name?: string;
-  nutrients?: {
-    proteins: number;
-    fat: number;
-    carbohydrates: number;
-    energy: number;
-  };
-}
+import type { ProductEntry } from '@/shared/types/product';
+
+export type { ProductEntry };
 
 export interface ProductList {
   count: number;
